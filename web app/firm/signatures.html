@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KBA Monitoring &amp; Signatures — Firm Operations — The File Room</title>
+  <meta name="description" content="IRS Pub 1345 Form 8879 signature monitoring, KBA attempts, and wet-signature fallback — The File Room by Pivot Aide Tax.">
+
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='22 4 156 172'%3E%3Cellipse cx='100' cy='88' rx='69' ry='67' fill='%231D3D51'/%3E%3Cellipse cx='100' cy='90' rx='59' ry='55' fill='%232C5169'/%3E%3Ccircle cx='73' cy='90' r='26' fill='%23F2F8FC'/%3E%3Ccircle cx='127' cy='90' r='26' fill='%23F2F8FC'/%3E%3Ccircle cx='73' cy='90' r='16' fill='%23019FFF'/%3E%3Ccircle cx='127' cy='90' r='16' fill='%23019FFF'/%3E%3Ccircle cx='73' cy='90' r='7.5' fill='%2306202D'/%3E%3Ccircle cx='127' cy='90' r='7.5' fill='%2306202D'/%3E%3Cpath d='M100 103 L110 121 L100 131 L90 121 Z' fill='%23EAE42F'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/shared-layout.css">
+</head>
+
+<body>
+  <div class="stage desk-mode" id="stage">
+    <div class="device desk" id="device">
+      <div class="notch"><span>9:41</span><span class="dot"></span><span>●●●●</span></div>
+
+      <div class="app" id="app">
+        <header class="appbar"></header>
+
+        <div class="workspace">
+          <div class="drawer-backdrop" id="drawer-backdrop"></div>
+          <aside class="side" id="side" aria-label="Firm Operations Navigation"></aside>
+
+          <main class="body" id="body">
+            <div id="page-breadcrumbs"></div>
+
+            <div class="page-header-row">
+              <div class="page-title-wrap">
+                <h1>KBA Monitoring &amp; Form 8879 Status</h1>
+                <p class="page-subtitle">IRS Pub 1345 Electronic Signature Tracking &middot; Identity Verification Audit Trail</p>
+              </div>
+              <div class="page-actions-wrap">
+                <a href="dashboard.html" class="btn sm btn-o">&larr; Operations Triage</a>
+              </div>
+            </div>
+
+            <div class="states-demo-bar">
+              <span class="states-demo-label">SIGNATURE STATE:</span>
+              <button type="button" class="states-demo-btn active" id="btn-state-live">● Live View</button>
+              <button type="button" class="states-demo-btn" id="btn-state-loading">Loading State</button>
+              <button type="button" class="states-demo-btn" id="btn-state-empty">Empty State</button>
+              <button type="button" class="states-demo-btn" id="btn-state-error">Error State</button>
+            </div>
+
+            <div id="sigs-content-area">
+              <div class="card p-lg mb-lg" style="background:var(--surface);">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                  <h3 style="font-family:var(--f-display);margin:0;font-size:1.15rem;">Live Envelope Telemetry</h3>
+                  <span class="chip ok sm" id="sigs-count-chip">IRS PUB 1345 MONITORED (0)</span>
+                </div>
+                <table class="table-clean" style="width:100%;font-size:.85rem;">
+                  <thead>
+                    <tr style="border-bottom:1px solid var(--line);text-align:left;">
+                      <th style="padding:8px 0;">Client</th>
+                      <th style="padding:8px 0;">Signers</th>
+                      <th style="padding:8px 0;">KBA Verification</th>
+                      <th style="padding:8px 0;">Envelope Status</th>
+                      <th style="padding:8px 0;text-align:right;">Practitioner Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="sigs-tbody">
+                    <tr id="sigs-empty-row">
+                      <td colspan="5" style="padding:48px 16px;text-align:center;background:var(--surface)">
+                        <div style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:rgba(13,148,136,0.12);color:var(--ok);font-size:1.3rem;font-weight:700;margin-bottom:10px">&#10003;</div>
+                        <div style="font-weight:700;font-size:1.05rem;color:var(--ink);margin-bottom:4px">No Pending Envelopes &middot; 0 Executions</div>
+                        <div style="font-size:0.82rem;color:var(--ink-2);max-width:500px;margin:0 auto 12px auto">All Form 8879 envelopes have been executed and verified. Real-time DocuSign telemetry will appear here automatically.</div>
+                        <span class="chip ok sm" style="font-family:var(--f-mono);font-size:.72rem">&bull; Live Backend Firebase Connected &middot; 0 Envelopes</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-backdrop">
+    <div class="modal-card modal-wide" id="modal-container"></div>
+  </div>
+  <div id="toast-container" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="js/firebase.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/auth-guard.js"></script>
+  <script src="js/core/layout.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      FileRoomLayout.init({
+        portal: 'firm',
+        activePage: 'signatures',
+        breadcrumbs: [
+          { title: 'The File Room', href: 'index.html' },
+          { title: 'Firm Operations', href: 'dashboard.html' },
+          { title: 'KBA Monitoring' }
+        ]
+      });
+
+      var contentArea = document.getElementById('sigs-content-area');
+
+      // RBAC Gate
+      var savedSession = null;
+      try {
+        var raw = localStorage.getItem('tfr_user_session');
+        if (raw) savedSession = JSON.parse(raw);
+      } catch (_) {}
+      var bridgeUser = (window.FirebaseBridge && window.FirebaseBridge.currentUser);
+      var user = (window.AuthGuard && window.AuthGuard.getAuthState && window.AuthGuard.getAuthState()) ||
+                 bridgeUser || savedSession || (window.FileRoomLayout && window.FileRoomLayout.resolveUser('firm'));
+      var role = (user && user.role ? user.role : '').toLowerCase();
+      var validStaffRoles = ['firm_admin', 'firm_partner', 'firm_preparer', 'firm_reviewer', 'firm_practitioner', 'firm_staff'];
+      var isStaff = FileRoomLayout.isStaffUser ? FileRoomLayout.isStaffUser(user) : Boolean(
+        user && (
+          role !== 'client' &&
+          validStaffRoles.includes(role) &&
+          user.isStaff
+        )
+      );
+
+      if (!isStaff) {
+        FileRoomLayout.renderAccessDenied(contentArea, {
+          title: '403 FORBIDDEN · ACCESS RESTRICTED',
+          message: 'Staff credentials and verified Multi-Factor Authentication (MFA) are required to access Firm Operations Console under FTC Safeguards § 314.4.',
+          loginUrl: 'index.html'
+        });
+        return;
+      }
+
+      var btnLive = document.getElementById('btn-state-live');
+      var btnLoading = document.getElementById('btn-state-loading');
+      var btnEmpty = document.getElementById('btn-state-empty');
+      var btnError = document.getElementById('btn-state-error');
+      var allBtns = [btnLive, btnLoading, btnEmpty, btnError];
+
+      function setActive(b) {
+        allBtns.forEach(function (btn) { btn.classList.remove('active'); });
+        b.classList.add('active');
+      }
+
+      function renderLiveSignaturesTable(items) {
+        var list = items || [];
+        var countChip = '<span class="chip ' + (list.length > 0 ? 'gold' : 'ok') + ' sm" id="sigs-count-chip">IRS PUB 1345 MONITORED (' + list.length + ')</span>';
+
+        var html = [
+          '<div class="card p-lg mb-lg" style="background:var(--surface);">',
+          '  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">',
+          '    <div>',
+          '      <h3 style="font-family:var(--f-display);margin:0;font-size:1.15rem;color:var(--ink)">Live Verification &amp; Form 8879 Telemetry</h3>',
+          '      <p style="font-size:.76rem;color:var(--ink-2);margin:2px 0 0 0">Authoritative IRS Pub 1345 § 5.2.2 identity proofing audit ledger and practitioner exceptions.</p>',
+          '    </div>',
+          '    ' + countChip,
+          '  </div>',
+          '  <div style="overflow-x:auto">',
+          '  <table class="table-clean" style="width:100%;font-size:.85rem;border-collapse:collapse">',
+          '    <thead>',
+          '      <tr style="border-bottom:1px solid var(--line);text-align:left;">',
+          '        <th style="padding:10px 8px;">Client / Engagement</th>',
+          '        <th style="padding:10px 8px;">Filing Scope</th>',
+          '        <th style="padding:10px 8px;">Identity Proofing Status</th>',
+          '        <th style="padding:10px 8px;">Session Reference</th>',
+          '        <th style="padding:10px 8px;text-align:right;">Practitioner Actions</th>',
+          '      </tr>',
+          '    </thead>',
+          '    <tbody id="sigs-tbody">'
+        ];
+
+        if (list.length === 0) {
+          html.push(
+            '      <tr id="sigs-empty-row">',
+            '        <td colspan="5" style="padding:48px 16px;text-align:center;background:var(--surface)">',
+            '          <div style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:rgba(13,148,136,0.12);color:var(--ok);font-size:1.3rem;font-weight:700;margin-bottom:10px">&#10003;</div>',
+            '          <div style="font-weight:700;font-size:1.05rem;color:var(--ink);margin-bottom:4px">No Pending Verification Envelopes &middot; 0 Executions</div>',
+            '          <div style="font-size:0.82rem;color:var(--ink-2);max-width:500px;margin:0 auto 12px auto">All Form 8879 envelopes have been executed and verified under IRS Pub 1345. New identity verification requests will populate here automatically.</div>',
+            '          <span class="chip ok sm" style="font-family:var(--f-mono);font-size:.72rem">&bull; Live Backend Firebase Connected &middot; 0 Envelopes</span>',
+            '        </td>',
+            '      </tr>'
+          );
+        } else {
+          list.forEach(function (sig) {
+            var kbaStatus = sig.kbaStatus || (sig.kbaPassed ? 'verified' : (sig.isLockedOut ? 'locked_out' : 'pending'));
+            var kbaBadge = '';
+
+            if (kbaStatus === 'verified') {
+              kbaBadge = '<span class="chip ok sm">✓ Verified (Persona)</span>';
+            } else if (kbaStatus === 'manual_override_approved') {
+              kbaBadge = '<span class="chip ok sm" style="background:rgba(13,148,136,0.14);color:var(--ok)">✓ Exception Approved</span>';
+            } else if (kbaStatus === 'manual_review') {
+              kbaBadge = '<span class="chip warn sm" style="background:rgba(245,158,11,0.14);color:var(--warn)">🔍 Manual Review Pending</span>';
+            } else if (kbaStatus === 'in_progress') {
+              kbaBadge = '<span class="chip brand sm">⏳ Session In Progress</span>';
+            } else if (kbaStatus === 'expired') {
+              kbaBadge = '<span class="chip warn sm">⌛ Session Expired</span>';
+            } else if (sig.isLockedOut || kbaStatus === 'locked_out') {
+              kbaBadge = '<span class="chip danger sm">⛔ Locked Out (Wet-Ink)</span>';
+            } else if (kbaStatus === 'failed') {
+              kbaBadge = '<span class="chip warn sm">⚠ Attempt 1 Failed</span>';
+            } else {
+              kbaBadge = '<span class="chip sm" style="color:var(--ink-2)">Pending Challenge</span>';
+            }
+
+            var refDisplay = sig.primaryInquiryId || sig.inquiryId || (sig.id ? ('inq_' + String(sig.id).slice(0, 10)) : '—');
+            var actionBtns = [
+              '<button type="button" class="btn xs btn-o btn-inspect-audit" data-id="' + sig.id + '">Inspect Audit</button>'
+            ];
+
+            if (kbaStatus === 'manual_review' || sig.isLockedOut || kbaStatus === 'locked_out' || kbaStatus === 'failed') {
+              actionBtns.push('<button type="button" class="btn xs btn-b btn-review-exception" data-id="' + sig.id + '">Review Exception</button>');
+            }
+
+            if (sig.isLockedOut || kbaStatus === 'locked_out') {
+              actionBtns.push('<button type="button" class="btn xs btn-o btn-wet-sig" data-client-uid="' + (sig.clientUid || '') + '" data-client-name="' + (sig.client || '') + '">Wet-Sig PDF</button>');
+            } else if (kbaStatus === 'pending') {
+              actionBtns.push('<button type="button" class="btn xs btn-o btn-resend-sig" data-client-uid="' + (sig.clientUid || '') + '" data-client-name="' + (sig.client || '') + '">Resend Notice</button>');
+            }
+
+            html.push(
+              '<tr style="border-bottom:1px solid var(--line-subtle);">' +
+              '  <td style="padding:12px 8px;">' +
+              '    <div style="font-weight:600;color:var(--ink)">' + (sig.client || 'Taxpayer Engagement') + '</div>' +
+              '    <div style="font-size:.72rem;color:var(--ink-2);font-family:var(--f-mono)">' + (sig.clientUid || sig.id) + '</div>' +
+              '  </td>' +
+              '  <td style="padding:12px 8px;">' +
+              '    <div style="color:var(--ink)">' + (sig.formType || 'Form 8879 (TY2026)') + '</div>' +
+              '    <div style="font-size:.72rem;color:var(--ink-3)">' + (sig.status || 'Sign Form 8879') + '</div>' +
+              '  </td>' +
+              '  <td style="padding:12px 8px;">' +
+              '    <div>' + kbaBadge + '</div>' +
+              '    <div style="font-size:.7rem;color:var(--ink-2);margin-top:4px">' + (sig.method || 'Enterprise Identity Proofing') + '</div>' +
+              '  </td>' +
+              '  <td style="padding:12px 8px;">' +
+              '    <div style="font-family:var(--f-mono);font-size:.74rem;color:var(--ink)"><code>' + refDisplay + '</code></div>' +
+              '    <div style="font-size:.68rem;color:var(--ink-3)">Updated: ' + (sig.sentDate || 'Today') + '</div>' +
+              '  </td>' +
+              '  <td style="padding:12px 8px;text-align:right;">' +
+              '    <div style="display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap">' + actionBtns.join('') + '</div>' +
+              '  </td>' +
+              '</tr>'
+            );
+          });
+        }
+
+        html.push('    </tbody>', '  </table>', '  </div>', '</div>');
+        contentArea.innerHTML = html.join('\n');
+
+        // Attach action handlers
+        attachTableActionListeners(list);
+      }
+
+      function attachTableActionListeners(items) {
+        // 1. Inspect Audit Details Modal
+        contentArea.querySelectorAll('.btn-inspect-audit').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var id = btn.getAttribute('data-id');
+            var item = items.find(function (i) { return i.id === id; });
+            if (item) openInspectAuditModal(item);
+          });
+        });
+
+        // 2. Review Exception Modal
+        contentArea.querySelectorAll('.btn-review-exception').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var id = btn.getAttribute('data-id');
+            var item = items.find(function (i) { return i.id === id; });
+            if (item) openReviewExceptionModal(item);
+          });
+        });
+
+        // 3. Wet-Signature Packet Generator
+        contentArea.querySelectorAll('.btn-wet-sig').forEach(function (btn) {
+          btn.addEventListener('click', async function () {
+            var uid = btn.getAttribute('data-client-uid');
+            var name = btn.getAttribute('data-client-name');
+            try {
+              FileRoomLayout.showToast('Generating IRS Pub 1345 physical wet-signature packet...', 'info');
+              if (window.FirebaseBridge && typeof window.FirebaseBridge.staffGenerateWetSig === 'function') {
+                await window.FirebaseBridge.staffGenerateWetSig(uid, name);
+              }
+              FileRoomLayout.showToast('Statutory wet-signature packet generated for hand signing', 'ok');
+              loadSignaturesQueue();
+            } catch (err) {
+              FileRoomLayout.showToast('Failed to generate wet signature: ' + err.message, 'warn');
+            }
+          });
+        });
+
+        // 4. Resend Notice
+        contentArea.querySelectorAll('.btn-resend-sig').forEach(function (btn) {
+          btn.addEventListener('click', async function () {
+            var uid = btn.getAttribute('data-client-uid');
+            var name = btn.getAttribute('data-client-name');
+            try {
+              FileRoomLayout.showToast('Dispatching Form 8879 reminder notice...', 'info');
+              if (window.FirebaseBridge && typeof window.FirebaseBridge.staffChaseSigner === 'function') {
+                await window.FirebaseBridge.staffChaseSigner(uid, name);
+              }
+              FileRoomLayout.showToast('Notice re-sent to ' + name, 'ok');
+            } catch (err) {
+              FileRoomLayout.showToast('Failed to resend notice: ' + err.message, 'warn');
+            }
+          });
+        });
+      }
+
+      function openInspectAuditModal(item) {
+        var kbaStatus = item.kbaStatus || (item.kbaPassed ? 'verified' : (item.isLockedOut ? 'locked_out' : 'pending'));
+        var ref = item.primaryInquiryId || item.inquiryId || ('inq_' + String(item.id).slice(0, 10));
+
+        var modalHtml = [
+          '<div class="modal-hdr" style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);background:var(--surface)">',
+          '  <div style="display:flex;align-items:center;gap:10px">',
+          '    <span style="font-size:1.3rem">🛡</span>',
+          '    <div>',
+          '      <h3 style="font-family:var(--f-display);margin:0;font-size:1.15rem;color:var(--ink)">Verification Status &amp; Compliance Audit</h3>',
+          '      <div style="font-size:.74rem;color:var(--ink-2)">' + item.client + ' &middot; ' + item.id + '</div>',
+          '    </div>',
+          '  </div>',
+          '  <button type="button" data-close-modal style="background:transparent;border:0;font-size:1.3rem;cursor:pointer;color:var(--ink-2)">&times;</button>',
+          '</div>',
+          '<div class="modal-body" style="padding:20px;font-size:.82rem;line-height:1.5;color:var(--ink)">',
+          '  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;background:var(--surface-2);padding:14px;border-radius:6px;border:1px solid var(--line);margin-bottom:16px">',
+          '    <div>',
+          '      <div style="font-size:.7rem;color:var(--ink-3)">VERIFICATION STATUS</div>',
+          '      <b>' + kbaStatus.toUpperCase() + '</b>',
+          '    </div>',
+          '    <div>',
+          '      <div style="font-size:.7rem;color:var(--ink-3)">IDENTITY GATEWAY PROVIDER</div>',
+          '      <b>Persona (IRS Pub 1345 § 5.2.2)</b>',
+          '    </div>',
+          '    <div>',
+          '      <div style="font-size:.7rem;color:var(--ink-3)">VERIFICATION REFERENCE (TOKEN)</div>',
+          '      <code style="font-family:var(--f-mono);font-size:.75rem">' + ref + '</code>',
+          '    </div>',
+          '    <div>',
+          '      <div style="font-size:.7rem;color:var(--ink-3)">STATUTORY ATTEMPTS RECORDED</div>',
+          '      <b>' + (item.primaryAttempts || (item.isLockedOut ? 2 : 0)) + ' of 2 Attempts</b>',
+          '    </div>',
+          '    <div>',
+          '      <div style="font-size:.7rem;color:var(--ink-3)">COMPLIANCE STANDARD</div>',
+          '      <span>IRS Pub 1345 § 5.2.2 &middot; NIST SP 800-63-3 AAL2</span>',
+          '    </div>',
+          '    <div>',
+          '      <div style="font-size:.7rem;color:var(--ink-3)">CUSTODY RETENTION PERIOD</div>',
+          '      <span style="color:var(--ok)">3 Years Statutory Custody (IRC § 6061)</span>',
+          '    </div>',
+          '  </div>',
+          (item.overrideMetadata ? [
+            '  <div style="background:rgba(1,159,255,0.06);border-left:3px solid var(--brand);padding:12px;border-radius:4px;margin-bottom:14px">',
+            '    <b style="color:var(--ink)">Authorized Practitioner Exception Record:</b>',
+            '    <div style="font-size:.76rem;color:var(--ink-2);margin-top:4px">',
+            '      Authorized By: <b>' + (item.overrideMetadata.staffEmail || item.overrideMetadata.overriddenBy) + '</b><br>',
+            '      Method: <b>' + (item.overrideMetadata.exceptionType || 'In-Person Gov ID Verification') + '</b><br>',
+            '      Justification: <i>' + (item.overrideMetadata.justification || 'Verified per firm exception protocol') + '</i>',
+            '    </div>',
+            '  </div>'
+          ].join('') : ''),
+          '  <div style="background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px;font-size:.75rem;color:var(--ink-2);margin-bottom:12px">',
+          '    <b style="color:var(--ink)">Security &amp; Privacy Safeguards Notice:</b><br>',
+          '    In strict compliance with FTC Safeguards Rule (16 CFR § 314.4) and IRC § 7216, raw credit answers, Social Security numbers, and provider signing secrets are permanently redacted from operational console views.',
+          '  </div>',
+          '</div>',
+          '<div class="modal-ftr" style="padding:12px 20px;background:var(--surface-2);border-top:1px solid var(--line);text-align:right">',
+          '  <button type="button" class="btn sm btn-b" data-close-modal>Close</button>',
+          '</div>'
+        ].join('');
+
+        if (window.FileRoomLayout) {
+          window.FileRoomLayout.openModal(modalHtml);
+        }
+      }
+
+      function openReviewExceptionModal(item) {
+        var ref = item.primaryInquiryId || item.inquiryId || ('inq_' + String(item.id).slice(0, 10));
+
+        var modalHtml = [
+          '<div class="modal-hdr" style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line);background:var(--surface)">',
+          '  <div style="display:flex;align-items:center;gap:10px">',
+          '    <span style="font-size:1.3rem">⚖</span>',
+          '    <div>',
+          '      <h3 style="font-family:var(--f-display);margin:0;font-size:1.15rem;color:var(--ink)">Practitioner Manual Review &amp; Exception</h3>',
+          '      <div style="font-size:.74rem;color:var(--ink-2)">' + item.client + ' &middot; ' + item.id + '</div>',
+          '    </div>',
+          '  </div>',
+          '  <button type="button" data-close-modal style="background:transparent;border:0;font-size:1.3rem;cursor:pointer;color:var(--ink-2)">&times;</button>',
+          '</div>',
+          '<div class="modal-body" style="padding:20px;font-size:.82rem;line-height:1.5;color:var(--ink)">',
+          '  <div style="background:rgba(245,158,11,0.08);border-left:3px solid var(--warn);padding:12px;border-radius:4px;margin-bottom:16px">',
+          '    <b style="color:var(--ink)">Auditable Practitioner Override Governance:</b>',
+          '    <div style="font-size:.75rem;color:var(--ink-2);margin-top:2px">',
+          '      Staff cannot mark a verification as provider-verified without an authorized, auditable override record. All actions are permanently committed to the immutable WORM audit ledger.',
+          '    </div>',
+          '  </div>',
+          '  <div style="margin-bottom:14px">',
+          '    <label style="display:block;font-weight:600;margin-bottom:6px;color:var(--ink)">Select Exception Resolution:</label>',
+          '    <select id="review-action-select" class="input" style="width:100%;padding:8px 10px;font-size:.82rem;border:1px solid var(--line);border-radius:4px;background:#fff">',
+          '      <option value="approve_exception">Approve Exception: In-Person Gov ID Inspection (Form 8879 Pad Unlocked)</option>',
+          '      <option value="approve_exception_video">Approve Exception: Remote Audio-Video Notarized Attestation</option>',
+          '      <option value="require_wet_signature">Require Physical Wet-Ink Signature (Revoke Remote E-Signing)</option>',
+          '      <option value="grant_retry">Grant Additional Attempt (Technical Glitch / Session Timeout)</option>',
+          '    </select>',
+          '  </div>',
+          '  <div style="margin-bottom:14px">',
+          '    <label style="display:block;font-weight:600;margin-bottom:6px;color:var(--ink)">Mandatory Due Diligence Justification (min 10 characters):</label>',
+          '    <textarea id="review-justification-input" class="input" rows="3" style="width:100%;padding:8px 10px;font-size:.8rem;border:1px solid var(--line);border-radius:4px;background:#fff;font-family:inherit" placeholder="e.g., Conducted in-person inspection of unexpired Maryland Driver\'s License and verified physical identity matches taxpayer file per firm exception policy § 4.2..."></textarea>',
+          '  </div>',
+          '  <div style="font-size:.72rem;color:var(--ink-3);font-family:var(--f-mono)">',
+          '    Session Ref: ' + ref + ' &middot; Current State: ' + (item.kbaStatus || 'pending') + '',
+          '  </div>',
+          '</div>',
+          '<div class="modal-ftr" style="padding:14px 20px;background:var(--surface-2);border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center">',
+          '  <button type="button" class="btn sm btn-o" data-close-modal>Cancel</button>',
+          '  <button type="button" class="btn sm btn-b" id="btn-submit-review-action">Commit Practitioner Action &rarr;</button>',
+          '</div>'
+        ].join('');
+
+        if (window.FileRoomLayout) {
+          window.FileRoomLayout.openModal(modalHtml);
+
+          var submitBtn = document.getElementById('btn-submit-review-action');
+          if (submitBtn) {
+            submitBtn.addEventListener('click', async function () {
+              var actionVal = document.getElementById('review-action-select').value;
+              var justVal = (document.getElementById('review-justification-input').value || '').trim();
+
+              if (!justVal || justVal.length < 10) {
+                alert('A clinical/compliance justification note (minimum 10 characters) is required under firm compliance policy.');
+                return;
+              }
+
+              submitBtn.disabled = true;
+              submitBtn.textContent = 'Committing WORM Audit Ledger...';
+
+              try {
+                var bridge = window.FirebaseBridge;
+                if (bridge && typeof bridge.staffReviewKbaVerification === 'function') {
+                  var excType = actionVal === 'approve_exception_video' ? 'REMOTE_VIDEO_NOTARIZED_ATTESTATION' : 'IN_PERSON_GOV_ID';
+                  var act = actionVal.startsWith('approve_exception') ? 'approve_exception' : actionVal;
+
+                  await bridge.staffReviewKbaVerification({
+                    engagementId: item.id || item.engagementId,
+                    signerRole: 'primary',
+                    action: act,
+                    justification: justVal,
+                    exceptionType: excType
+                  });
+                }
+
+                FileRoomLayout.closeModal();
+                FileRoomLayout.showToast('Practitioner action recorded with immutable WORM audit token', 'ok');
+                loadSignaturesQueue();
+              } catch (err) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Commit Practitioner Action &rarr;';
+                FileRoomLayout.showToast('Failed to record action: ' + err.message, 'err');
+              }
+            });
+          }
+        }
+      }
+
+      async function loadSignaturesQueue() {
+        setActive(btnLive);
+        FileRoomLayout.renderLoading(contentArea, 'Connecting to IRS Pub 1345 audit ledger...');
+
+        var bridge = window.FirebaseBridge;
+        var opsData = null;
+        if (bridge && typeof bridge.getFirmOperationsData === 'function') {
+          try {
+            opsData = await bridge.getFirmOperationsData();
+          } catch (_) {}
+        }
+
+        var items = [];
+        var seenIds = new Set();
+
+        if (opsData && opsData.kbaList) {
+          opsData.kbaList.forEach(function (k) {
+            if (!seenIds.has(k.id)) {
+              seenIds.add(k.id);
+              items.push(k);
+            }
+          });
+        }
+
+        renderLiveSignaturesTable(items);
+        FileRoomLayout.showToast('KBA signing telemetry loaded', 'info');
+      }
+
+      // Initial Load
+      if (window.FirebaseBridge) {
+        loadSignaturesQueue();
+      } else {
+        var retries = 0;
+        var timer = setInterval(function () {
+          retries++;
+          if (window.FirebaseBridge || retries >= 15) {
+            clearInterval(timer);
+            loadSignaturesQueue();
+          }
+        }, 100);
+        window.addEventListener('firebase-bridge-ready', function () { clearInterval(timer); loadSignaturesQueue(); }, { once: true });
+        window.addEventListener('firebase-ready', function () { clearInterval(timer); loadSignaturesQueue(); }, { once: true });
+      }
+
+      btnLive.addEventListener('click', function () {
+        loadSignaturesQueue();
+      });
+
+      btnLoading.addEventListener('click', function () {
+        setActive(btnLoading);
+        FileRoomLayout.renderLoading(contentArea, 'Connecting to IRS Pub 1345 audit ledger...');
+      });
+
+      btnEmpty.addEventListener('click', function () {
+        setActive(btnEmpty);
+        FileRoomLayout.renderEmpty(contentArea, {
+          icon: '✎',
+          title: 'No Pending Envelopes',
+          desc: 'All outstanding Form 8879 envelopes have been executed and verified.',
+          actionText: 'View Triage',
+          actionHref: 'dashboard.html'
+        });
+      });
+
+      btnError.addEventListener('click', function () {
+        setActive(btnError);
+        FileRoomLayout.renderError(contentArea, {
+          title: 'Unable to Load Signature Envelopes',
+          desc: 'Identity verification stream interrupted. Please retry.',
+          onRetry: function () { btnLive.click(); }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

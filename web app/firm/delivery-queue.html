@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document Delivery Queue &amp; Dead-Letter Office — Firm Operations — The File Room</title>
+  <meta name="description" content="Authoritative document delivery queue, bounded exponential retries, distributed worker leases, and dead-letter review under IRC § 7216 & IRS Pub 1345 — The File Room by Pivot Aide Tax.">
+
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='22 4 156 172'%3E%3Cellipse cx='100' cy='88' rx='69' ry='67' fill='%231D3D51'/%3E%3Cellipse cx='100' cy='90' rx='59' ry='55' fill='%232C5169'/%3E%3Ccircle cx='73' cy='90' r='26' fill='%23F2F8FC'/%3E%3Ccircle cx='127' cy='90' r='26' fill='%23F2F8FC'/%3E%3Ccircle cx='73' cy='90' r='16' fill='%23019FFF'/%3E%3Ccircle cx='127' cy='90' r='16' fill='%23019FFF'/%3E%3Ccircle cx='73' cy='90' r='7.5' fill='%2306202D'/%3E%3Ccircle cx='127' cy='90' r='7.5' fill='%2306202D'/%3E%3Cpath d='M100 103 L110 121 L100 131 L90 121 Z' fill='%23EAE42F'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/app.css">
+  <link rel="stylesheet" href="../css/shared-layout.css">
+
+  <style>
+    .queue-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .queue-metric-box {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: transform .15s ease, border-color .15s ease;
+    }
+    .queue-metric-box:hover {
+      transform: translateY(-2px);
+      border-color: var(--brand);
+    }
+    .queue-metric-box .val {
+      font-size: 1.6rem;
+      font-weight: 700;
+      font-family: var(--f-display);
+      color: var(--ink);
+      line-height: 1.1;
+      margin-top: 4px;
+    }
+    .queue-metric-box .lbl {
+      font-size: .72rem;
+      color: var(--ink-2);
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: .03em;
+    }
+    .queue-metric-box .sub {
+      font-size: .68rem;
+      color: var(--ink-muted);
+      margin-top: 4px;
+    }
+    .queue-controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 14px 18px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      margin-bottom: 16px;
+    }
+    .filter-tabs-bar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .queue-filter-btn {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      color: var(--ink-2);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: .78rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .queue-filter-btn:hover {
+      background: var(--surface-hover);
+      color: var(--ink);
+    }
+    .queue-filter-btn.active {
+      background: var(--brand);
+      color: #06202D;
+      border-color: var(--brand);
+      font-weight: 700;
+    }
+    .queue-filter-btn .count-badge {
+      background: rgba(0,0,0,0.18);
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-size: .7rem;
+      font-family: var(--f-mono);
+    }
+    .queue-filter-btn.active .count-badge {
+      background: rgba(0,0,0,0.25);
+      color: #06202D;
+    }
+    .worker-badge-pulse {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--ok);
+      background: var(--ok-bg);
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
+    .worker-badge-pulse::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--ok);
+      border-radius: 50%;
+      animation: pulse 1.8s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="stage desk-mode" id="stage">
+    <div class="device desk" id="device">
+      <div class="notch"><span>9:41</span><span class="dot"></span><span>●●●●</span></div>
+
+      <div class="app" id="app">
+        <header class="appbar"></header>
+
+        <div class="workspace">
+          <div class="drawer-backdrop" id="drawer-backdrop"></div>
+          <aside class="side" id="side" aria-label="Firm Operations Navigation"></aside>
+
+          <main class="body" id="body">
+            <div id="page-breadcrumbs"></div>
+
+            <div class="page-header-row">
+              <div class="page-title-wrap">
+                <h1>Document Delivery Queue &amp; Dead-Letter Office</h1>
+                <p class="page-subtitle">Authoritative Firestore Transmission Store &middot; Bounded Exponential Retries &middot; Distributed Worker Leases &middot; IRC § 7216</p>
+              </div>
+              <div class="page-actions-wrap" style="display:flex;gap:8px;">
+                <a href="documents.html" class="btn sm btn-o">&larr; CPA Review Queue</a>
+                <button type="button" class="btn sm btn-b" id="btn-run-worker-cycle">Run Worker Cycle Now ⚡</button>
+              </div>
+            </div>
+
+            <!-- Queue Metrics Bar -->
+            <div class="queue-metrics-grid">
+              <div class="queue-metric-box">
+                <span class="lbl">In-Flight Queue</span>
+                <span class="val" id="metric-in-flight">0</span>
+                <span class="sub">Active Pipeline</span>
+              </div>
+              <div class="queue-metric-box">
+                <span class="lbl">Queued</span>
+                <span class="val gold" id="metric-queued">0</span>
+                <span class="sub">Awaiting Dispatch</span>
+              </div>
+              <div class="queue-metric-box">
+                <span class="lbl">Processing</span>
+                <span class="val cyan" id="metric-processing">0</span>
+                <span class="sub">Active Leases</span>
+              </div>
+              <div class="queue-metric-box">
+                <span class="lbl">Delivered</span>
+                <span class="val ok" id="metric-delivered">0</span>
+                <span class="sub">Receipts Confirmed</span>
+              </div>
+              <div class="queue-metric-box">
+                <span class="lbl">Retrying</span>
+                <span class="val warn" id="metric-retrying">0</span>
+                <span class="sub">Backoff &amp; Jitter</span>
+              </div>
+              <div class="queue-metric-box" style="border-left:3px solid #F59E0B;">
+                <span class="lbl">Needs Review</span>
+                <span class="val alert" id="metric-needs-review" style="color:#F59E0B;">0</span>
+                <span class="sub">Dead-Letter Office</span>
+              </div>
+              <div class="queue-metric-box" style="border-left:3px solid var(--danger);">
+                <span class="lbl">Failed</span>
+                <span class="val err" id="metric-failed">0</span>
+                <span class="sub">Non-Retryable (4xx)</span>
+              </div>
+            </div>
+
+            <div id="queue-main-content-area">
+              <!-- Worker Control Bar & Simulation Tools -->
+              <div class="queue-controls-bar">
+                <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                  <span class="worker-badge-pulse">Worker Engine: Online</span>
+                  <span style="font-size:.78rem;color:var(--ink-2);">
+                    Bounded Retries (Max 5) &middot; Backoff (1s–300s + ±25% Jitter) &middot; 60s Lease TTL
+                  </span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                  <span style="font-size:.72rem;color:var(--ink-muted);font-weight:600;">SIMULATE SCENARIOS:</span>
+                  <button type="button" class="btn xs btn-o" id="sim-btn-429" title="Inject simulated HTTP 429 Rate Limit with Retry-After header">Test 429 Throttle</button>
+                  <button type="button" class="btn xs btn-o" id="sim-btn-503" title="Inject simulated HTTP 503 Service Unavailable">Test 503 Error</button>
+                  <button type="button" class="btn xs btn-o" id="sim-btn-exhaust" title="Inject simulated exhausted retries into Dead Letter Office">Test DLO Exhaust</button>
+                  <button type="button" class="btn xs btn-o" id="sim-btn-crash" title="Simulate crashed worker with expired lease">Test Lease Reclaim</button>
+                  <button type="button" class="btn xs btn-o" id="btn-reset-demo-queue" title="Reset queue to canonical seed state">Reset</button>
+                </div>
+              </div>
+
+              <!-- Filter Tabs and Search Bar -->
+              <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
+                <div class="filter-tabs-bar">
+                  <button type="button" class="queue-filter-btn active" data-filter="all">All Items <span class="count-badge" id="count-tab-all">0</span></button>
+                  <button type="button" class="queue-filter-btn" data-filter="queued">Queued <span class="count-badge" id="count-tab-queued">0</span></button>
+                  <button type="button" class="queue-filter-btn" data-filter="processing">Processing <span class="count-badge" id="count-tab-processing">0</span></button>
+                  <button type="button" class="queue-filter-btn" data-filter="retry_pending">Retrying <span class="count-badge" id="count-tab-retry_pending">0</span></button>
+                  <button type="button" class="queue-filter-btn" data-filter="delivered">Delivered <span class="count-badge" id="count-tab-delivered">0</span></button>
+                  <button type="button" class="queue-filter-btn" data-filter="needs_review" style="color:#F59E0B;">Dead Letter / Review <span class="count-badge" id="count-tab-needs_review">0</span></button>
+                  <button type="button" class="queue-filter-btn" data-filter="permanently_failed">Failed <span class="count-badge" id="count-tab-permanently_failed">0</span></button>
+                </div>
+                <div style="position:relative;min-width:240px;">
+                  <input type="text" id="queue-search-input" class="input sm" placeholder="Search client, document, key..." style="width:100%;font-size:.8rem;padding-left:12px;">
+                </div>
+              </div>
+
+              <!-- Authoritative Queue Table -->
+              <div class="card p-0 mb-lg" style="background:var(--surface);overflow:hidden;border:1px solid var(--line);">
+                <table class="table-clean" style="width:100%;font-size:.82rem;">
+                  <thead>
+                    <tr style="background:var(--surface-sunken);border-bottom:1px solid var(--line);text-align:left;">
+                      <th style="padding:12px;">Taxpayer / Client</th>
+                      <th style="padding:12px;">Document &amp; Storage Reference</th>
+                      <th style="padding:12px;">Queue State</th>
+                      <th style="padding:12px;">Attempts</th>
+                      <th style="padding:12px;">Next Attempt</th>
+                      <th style="padding:12px;">Last Error Category</th>
+                      <th style="padding:12px;text-align:right;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="queue-table-body">
+                    <!-- Dynamic Rows Rendered by FirmDeliveryQueue -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Statutory Disclaimer Banner -->
+              <div class="card p-md" style="background:rgba(255,255,255,0.02);border:1px dashed var(--line);font-size:.78rem;color:var(--ink-2);line-height:1.5;">
+                <b style="color:var(--ink);">IRC § 7216 &amp; IRS Publication 1345 Compliance Protocol:</b>
+                All tax documents are retained in authorized Cloud Storage under AES-256 custody. Documents cannot be purged while in active queue states (<code>queued</code>, <code>processing</code>, <code>retry_pending</code>, or <code>needs_review</code>).
+                Browser <code>localStorage</code> / <code>sessionStorage</code> is an ephemeral client-side crash-recovery aid only and is never treated as encrypted storage or the authoritative taxpayer document copy.
+              </div>
+            </div>
+
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inspection Modal Backdrop -->
+  <div class="modal-backdrop" id="modal-backdrop">
+    <div class="modal-card modal-wide" id="modal-container"></div>
+  </div>
+  <div id="toast-container" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/firebase.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/core/layout.js"></script>
+  <script src="../js/client/document-delivery-client.js"></script>
+  <script src="../js/firm/delivery-queue.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      FileRoomLayout.init({
+        portal: 'firm',
+        activePage: 'delivery-queue',
+        breadcrumbs: [
+          { title: 'The File Room', href: '../index.html' },
+          { title: 'Firm Operations', href: 'dashboard.html' },
+          { title: 'Document Delivery Queue' }
+        ]
+      });
+
+      var contentArea = document.getElementById('queue-main-content-area');
+
+      // RBAC Gate
+      var savedSession = null;
+      try {
+        var raw = localStorage.getItem('tfr_user_session');
+        if (raw) savedSession = JSON.parse(raw);
+      } catch (_) {}
+      var bridgeUser = (window.FirebaseBridge && window.FirebaseBridge.currentUser);
+      var user = (window.AuthGuard && window.AuthGuard.getAuthState && window.AuthGuard.getAuthState()) ||
+                 bridgeUser || savedSession || (window.FileRoomLayout && window.FileRoomLayout.resolveUser('firm'));
+      var isStaff = FileRoomLayout.isStaffUser ? FileRoomLayout.isStaffUser(user) : Boolean(
+        user && (
+          user.role === 'firm_admin' ||
+          user.role === 'firm_preparer' ||
+          user.role === 'firm_staff' ||
+          user.isStaff ||
+          (user.email && (user.email.endsWith('@pivot-aide-tax.com') || user.email.endsWith('@pivot-aide.tax') || user.email.includes('cpa') || user.email.includes('preparer') || user.email.includes('denise') || user.email.includes('admin') || user.email.includes('partner') || user.email.includes('jordan')))
+        )
+      );
+
+      if (!isStaff) {
+        FileRoomLayout.renderAccessDenied(contentArea, {
+          title: '403 FORBIDDEN · ACCESS RESTRICTED',
+          message: 'Staff credentials and verified Multi-Factor Authentication (MFA) are required to access Firm Operations Console and Document Delivery Queue under FTC Safeguards § 314.4.',
+          loginUrl: 'index.html'
+        });
+        return;
+      }
+
+      // Initialize Firm Delivery Queue Controller
+      if (window.FirmDeliveryQueue) {
+        window.FirmDeliveryQueue.init();
+      }
+    });
+  </script>
+</body>
+
+</html>

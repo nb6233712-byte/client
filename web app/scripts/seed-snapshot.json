@@ -1,0 +1,296 @@
+{
+  "client": {
+    "uid": "usr_whitfield_4417",
+    "clientUid": "usr_whitfield_4417",
+    "displayName": "Michael & Elena Whitfield",
+    "primaryEmail": "m.whitfield@example.com",
+    "spouseEmail": "e.whitfield@example.com",
+    "role": "client",
+    "filingStatus": "Married Filing Jointly",
+    "taxYear": 2026,
+    "activeEngagementId": "eng_2026_whitfield",
+    "mfaVerified": true,
+    "irc7216Consent": true,
+    "status": "active",
+    "createdAt": "2026-01-14T10:00:00.000Z",
+    "updatedAt": "2026-10-18T17:10:54.984Z"
+  },
+  "practitioner": {
+    "uid": "preparer_denise_cpa",
+    "name": "Denise Rosenthal, CPA",
+    "email": "denise@pivot-aide.tax",
+    "role": "firm_preparer",
+    "ptin": "P01849201",
+    "firmName": "Pivot Aide Tax",
+    "circular230Verified": true,
+    "mfaVerified": true,
+    "status": "active",
+    "createdAt": "2025-11-01T08:00:00.000Z",
+    "updatedAt": "2026-10-18T17:10:54.984Z"
+  },
+  "engagement": {
+    "id": "eng_2026_whitfield",
+    "clientUid": "usr_whitfield_4417",
+    "taxYear": 2026,
+    "filingStatus": "Married Filing Jointly",
+    "currentStage": 3,
+    "stageLabel": "In Preparation",
+    "overallProgress": 68,
+    "federalRefund": 3418,
+    "stateBalanceDue": 612,
+    "assignedCpa": {
+      "name": "Denise Rosenthal, CPA",
+      "ptin": "P01849201"
+    },
+    "jurisdictions": [
+      "IRS Form 1040",
+      "MD Form 502 (Resident)",
+      "VA Form 760 (Non-Resident Reciprocity)",
+      "PA Form PA-40 (Non-Resident Reciprocity)"
+    ],
+    "notes": "Draft Form 1040 Schedule C & Schedule E in progress. Awaiting 1099-MISC & K-1.",
+    "steps": [
+      {
+        "step": 1,
+        "title": "Intake Opened",
+        "status": "done",
+        "meta": "14 Jan · Completed"
+      },
+      {
+        "step": 2,
+        "title": "Checklist Upload",
+        "status": "done",
+        "meta": "11 of 13 files received"
+      },
+      {
+        "step": 3,
+        "title": "In Preparation",
+        "status": "now",
+        "meta": "Current with Denise R., CPA"
+      },
+      {
+        "step": 4,
+        "title": "Return Review",
+        "status": "todo",
+        "meta": "Draft Form 1040"
+      },
+      {
+        "step": 5,
+        "title": "Sign Form 8879",
+        "status": "todo",
+        "meta": "IRS e-File Authorization"
+      },
+      {
+        "step": 6,
+        "title": "IRS Transmitted",
+        "status": "todo",
+        "meta": "Target: Oct 15, 2026"
+      }
+    ],
+    "upcomingDeadlines": [
+      {
+        "label": "Q3 Estimated Tax Payment (IRS & MD)",
+        "date": "15 Sep 2026",
+        "badge": "Upcoming"
+      },
+      {
+        "label": "Form 1040 Extension Filing Cutoff",
+        "date": "15 Oct 2026",
+        "badge": "Target"
+      },
+      {
+        "label": "IRC § 7216 Annual Consent Renewal",
+        "date": "31 Dec 2026",
+        "badge": "Compliance"
+      }
+    ],
+    "createdAt": "2026-01-14T10:00:00.000Z",
+    "updatedAt": "2026-10-18T17:10:54.984Z"
+  },
+  "documentRequests": [
+    {
+      "id": "doc_req_1099misc_whitfield",
+      "clientUid": "usr_whitfield_4417",
+      "engagementId": "eng_2026_whitfield",
+      "title": "1099-MISC (Keystone Property Group)",
+      "form": "1099-MISC",
+      "issuer": "Keystone Property Group",
+      "category": "1099 / Income Records",
+      "status": "missing",
+      "priority": "high",
+      "dueAt": "15 Sep 2026",
+      "description": "Required for Schedule E rental property income calculation.",
+      "actionRequired": true
+    },
+    {
+      "id": "doc_req_k1_whitfield",
+      "clientUid": "usr_whitfield_4417",
+      "engagementId": "eng_2026_whitfield",
+      "title": "Schedule K-1 (Blue Ridge Tech Partners)",
+      "form": "Schedule K-1 (Form 1065)",
+      "issuer": "Blue Ridge Tech Partners",
+      "category": "Pass-Through Partnership",
+      "status": "missing",
+      "priority": "high",
+      "dueAt": "15 Sep 2026",
+      "description": "Required for pass-through partnership income and self-employment calculation.",
+      "actionRequired": true
+    },
+    {
+      "id": "doc_req_closing_whitfield",
+      "clientUid": "usr_whitfield_4417",
+      "engagementId": "eng_2026_whitfield",
+      "title": "Closing Disclosure (Halcyon Row)",
+      "form": "Closing Disclosure",
+      "issuer": "Halcyon Row Rental Settlement",
+      "category": "Real Estate / Rental Statement",
+      "status": "in_review",
+      "priority": "medium",
+      "dueAt": "15 Sep 2026",
+      "description": "Settlement statement under CPA diligence to determine rental property basis and depreciation.",
+      "fileName": "Halcyon_Row_Closing_Disclosure_2026.pdf",
+      "fileSize": 4820192,
+      "mimeType": "application/pdf",
+      "uploadedAt": "2026-09-08T14:22:00.000Z",
+      "actionRequired": false
+    },
+    {
+      "id": "doc_req_w2_whitfield",
+      "clientUid": "usr_whitfield_4417",
+      "engagementId": "eng_2026_whitfield",
+      "title": "W-2 (Halstead Medical Group)",
+      "form": "Form W-2",
+      "issuer": "Halstead Medical Group",
+      "category": "Wage & Tax Statement",
+      "status": "accepted",
+      "priority": "standard",
+      "dueAt": "Completed",
+      "description": "Wage and tax statement diligence completed under Circular 230 § 10.22.",
+      "fileName": "W2_Halstead_Elena_Whitfield_2026.pdf",
+      "fileSize": 1248900,
+      "mimeType": "application/pdf",
+      "uploadedAt": "2026-09-01T09:15:00.000Z",
+      "acceptedAt": "2026-09-02T11:05:00.000Z",
+      "acceptedBy": "Denise Rosenthal, CPA",
+      "actionRequired": false
+    }
+  ],
+  "signature": {
+    "id": "sig_8879_whitfield",
+    "clientUid": "usr_whitfield_4417",
+    "engagementId": "eng_2026_whitfield",
+    "form": "Form 8879",
+    "taxYear": 2026,
+    "title": "IRS e-file Signature Authorization (Form 8879)",
+    "status": "pending",
+    "kbaRequired": true,
+    "statutoryAuthority": "IRS Publication 1345 § 5",
+    "primarySigner": {
+      "name": "Michael Whitfield",
+      "email": "m.whitfield@example.com",
+      "role": "primary",
+      "status": "pending",
+      "attemptsLeft": 3,
+      "signedAt": null
+    },
+    "secondarySigner": {
+      "name": "Elena Whitfield",
+      "email": "e.whitfield@example.com",
+      "role": "spouse",
+      "status": "pending",
+      "attemptsLeft": 3,
+      "signedAt": null
+    },
+    "retentionYears": 3,
+    "createdAt": "2026-09-08T10:00:00.000Z",
+    "updatedAt": "2026-10-18T17:10:54.984Z"
+  },
+  "messages": [
+    {
+      "id": "msg_whitfield_001",
+      "engagementId": "eng_2026_whitfield",
+      "clientUid": "usr_whitfield_4417",
+      "senderId": "preparer_denise_cpa",
+      "senderName": "Denise Rosenthal, CPA",
+      "senderRole": "staff",
+      "recipientId": "usr_whitfield_4417",
+      "recipientName": "Michael Whitfield",
+      "text": "Welcome Michael & Elena. I have started drafting your multi-state return for Maryland, Virginia, and Pennsylvania. Please upload your remaining 1099-MISC and K-1 when available.",
+      "timestamp": "2026-09-07T09:30:00.000Z",
+      "read": true
+    },
+    {
+      "id": "msg_whitfield_002",
+      "engagementId": "eng_2026_whitfield",
+      "clientUid": "usr_whitfield_4417",
+      "senderId": "usr_whitfield_4417",
+      "senderName": "Michael Whitfield",
+      "senderRole": "client",
+      "recipientId": "preparer_denise_cpa",
+      "recipientName": "Denise Rosenthal, CPA",
+      "text": "Thanks Denise! Just uploaded the settlement statement / Closing Disclosure for the Halcyon Row rental property. Reaching out to Keystone for the revised 1099-MISC.",
+      "timestamp": "2026-09-08T14:30:00.000Z",
+      "read": true
+    },
+    {
+      "id": "msg_whitfield_003",
+      "engagementId": "eng_2026_whitfield",
+      "clientUid": "usr_whitfield_4417",
+      "senderId": "preparer_denise_cpa",
+      "senderName": "Denise Rosenthal, CPA",
+      "senderRole": "staff",
+      "recipientId": "usr_whitfield_4417",
+      "recipientName": "Michael Whitfield",
+      "text": "I have the closing disclosure — thank you. One question on the rental property: did you make any improvements prior to placing it in service on August 1st?",
+      "timestamp": "2026-09-09T08:02:00.000Z",
+      "read": true
+    },
+    {
+      "id": "msg_whitfield_004",
+      "engagementId": "eng_2026_whitfield",
+      "clientUid": "usr_whitfield_4417",
+      "senderId": "usr_whitfield_4417",
+      "senderName": "Michael Whitfield",
+      "senderRole": "client",
+      "recipientId": "preparer_denise_cpa",
+      "recipientName": "Denise Rosenthal, CPA",
+      "text": "Yes, we replaced the HVAC system for $7,200 right before tenants moved in. I will upload the contractor invoice today.",
+      "timestamp": "2026-09-10T11:45:00.000Z",
+      "read": false
+    }
+  ],
+  "invoice": {
+    "id": "inv_2026_001",
+    "invoiceNumber": "INV-2026-0418",
+    "clientUid": "usr_whitfield_4417",
+    "engagementId": "eng_2026_whitfield",
+    "totalAmount": 1240,
+    "amountDue": 1240,
+    "status": "unpaid",
+    "currency": "USD",
+    "dueDate": "2026-09-15",
+    "issuedDate": "2026-08-28",
+    "paymentTerms": "Net 15 · Due upon return delivery",
+    "pciDssCompliance": "PCI-DSS v4.0.1 SAQ-A (Hosted Fields)",
+    "items": [
+      {
+        "desc": "Individual return — federal Form 1040",
+        "amount": 400
+      },
+      {
+        "desc": "Maryland, Virginia, Pennsylvania returns",
+        "amount": 285
+      },
+      {
+        "desc": "Schedule C — Whitfield Design Co.",
+        "amount": 310
+      },
+      {
+        "desc": "Schedule E — Halcyon Row rental property",
+        "amount": 245
+      }
+    ],
+    "createdAt": "2026-08-28T09:00:00.000Z",
+    "updatedAt": "2026-10-18T17:10:54.984Z"
+  }
+}

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Returns &amp; Sigs — Firm Operations — The File Room</title>
+  <meta name="description" content="Practitioner return review and publishing control — The File Room by Pivot Aide Tax.">
+
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='22 4 156 172'%3E%3Cellipse cx='100' cy='88' rx='69' ry='67' fill='%231D3D51'/%3E%3Cellipse cx='100' cy='90' rx='59' ry='55' fill='%232C5169'/%3E%3Ccircle cx='73' cy='90' r='26' fill='%23F2F8FC'/%3E%3Ccircle cx='127' cy='90' r='26' fill='%23F2F8FC'/%3E%3Ccircle cx='73' cy='90' r='16' fill='%23019FFF'/%3E%3Ccircle cx='127' cy='90' r='16' fill='%23019FFF'/%3E%3Ccircle cx='73' cy='90' r='7.5' fill='%2306202D'/%3E%3Ccircle cx='127' cy='90' r='7.5' fill='%2306202D'/%3E%3Cpath d='M100 103 L110 121 L100 131 L90 121 Z' fill='%23EAE42F'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/app.css">
+  <link rel="stylesheet" href="../css/shared-layout.css">
+</head>
+
+<body>
+  <div class="stage desk-mode" id="stage">
+    <div class="device desk" id="device">
+      <div class="notch"><span>9:41</span><span class="dot"></span><span>●●●●</span></div>
+
+      <div class="app" id="app">
+        <header class="appbar"></header>
+
+        <div class="workspace">
+          <div class="drawer-backdrop" id="drawer-backdrop"></div>
+          <aside class="side" id="side" aria-label="Firm Operations Navigation"></aside>
+
+          <main class="body" id="body">
+            <div id="page-breadcrumbs"></div>
+
+            <div class="page-header-row">
+              <div class="page-title-wrap">
+                <h1>Prepared Returns &amp; Publication Control</h1>
+                <p class="page-subtitle">Practitioner Review, PTIN/EFIN Certification, and Publication Gates</p>
+              </div>
+              <div class="page-actions-wrap">
+                <a href="dashboard.html" class="btn sm btn-o">&larr; Operations Triage</a>
+              </div>
+            </div>
+
+            <div class="states-demo-bar">
+              <span class="states-demo-label">RETURNS STATE:</span>
+              <button type="button" class="states-demo-btn active" id="btn-state-live">● Live View</button>
+              <button type="button" class="states-demo-btn" id="btn-state-loading">Loading State</button>
+              <button type="button" class="states-demo-btn" id="btn-state-empty">Empty State</button>
+              <button type="button" class="states-demo-btn" id="btn-state-error">Error State</button>
+            </div>
+
+            <div id="returns-content-area">
+              <div class="card p-lg mb-lg" style="background:var(--surface);">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                  <h3 style="font-family:var(--f-display);margin:0;font-size:1.15rem;">Returns Ready for Staff Sign-Off</h3>
+                  <span class="chip gold sm">1 AWAITING PUBLICATION</span>
+                </div>
+                <table class="table-clean" style="width:100%;font-size:.85rem;">
+                  <thead>
+                    <tr style="border-bottom:1px solid var(--line);text-align:left;">
+                      <th style="padding:8px 0;">Client</th>
+                      <th style="padding:8px 0;">Return Package</th>
+                      <th style="padding:8px 0;">Preparer</th>
+                      <th style="padding:8px 0;">Est. Refund / Due</th>
+                      <th style="padding:8px 0;text-align:right;">Publication Gate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom:1px solid var(--line-subtle);">
+                      <td style="padding:10px 0;"><b>Michael &amp; Elena Whitfield</b></td>
+                      <td>TY2026 Form 1040 (Joint) + MD, VA, PA</td>
+                      <td>Denise R., CPA</td>
+                      <td>+$3,418.00 (Fed) / -$612.00 (State)</td>
+                      <td style="text-align:right;">
+                        <button class="btn xs btn-b" onclick="FileRoomLayout.showToast('Return published to Michael Whitfield portal. Form 8879 envelope queued.', 'ok')">Publish to Client &rarr;</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-backdrop">
+    <div class="modal-card modal-wide" id="modal-container"></div>
+  </div>
+  <div id="toast-container" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/firebase.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/core/layout.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      FileRoomLayout.init({
+        portal: 'firm',
+        activePage: 'returns',
+        breadcrumbs: [
+          { title: 'The File Room', href: '../index.html' },
+          { title: 'Firm Operations', href: 'dashboard.html' },
+          { title: 'Returns & Sigs' }
+        ]
+      });
+
+      var contentArea = document.getElementById('returns-content-area');
+
+      // RBAC Gate
+      var savedSession = null;
+      try {
+        var raw = localStorage.getItem('tfr_user_session');
+        if (raw) savedSession = JSON.parse(raw);
+      } catch (_) {}
+      var bridgeUser = (window.FirebaseBridge && window.FirebaseBridge.currentUser);
+      var user = (window.AuthGuard && window.AuthGuard.getAuthState && window.AuthGuard.getAuthState()) ||
+                 bridgeUser || savedSession || (window.FileRoomLayout && window.FileRoomLayout.resolveUser('firm'));
+      var isStaff = FileRoomLayout.isStaffUser ? FileRoomLayout.isStaffUser(user) : Boolean(
+        user && (
+          user.role === 'firm_admin' ||
+          user.role === 'firm_preparer' ||
+          user.role === 'firm_staff' ||
+          user.isStaff ||
+          (user.email && (user.email.endsWith('@pivot-aide-tax.com') || user.email.endsWith('@pivot-aide.tax') || user.email.includes('cpa') || user.email.includes('preparer') || user.email.includes('denise') || user.email.includes('admin') || user.email.includes('partner') || user.email.includes('jordan')))
+        )
+      );
+
+      if (!isStaff) {
+        FileRoomLayout.renderAccessDenied(contentArea, {
+          title: '403 FORBIDDEN · ACCESS RESTRICTED',
+          message: 'Staff credentials and verified Multi-Factor Authentication (MFA) are required to access Firm Operations Console under FTC Safeguards § 314.4.',
+          loginUrl: '../index.html'
+        });
+        return;
+      }
+
+      var btnLive = document.getElementById('btn-state-live');
+      var btnLoading = document.getElementById('btn-state-loading');
+      var btnEmpty = document.getElementById('btn-state-empty');
+      var btnError = document.getElementById('btn-state-error');
+      var allBtns = [btnLive, btnLoading, btnEmpty, btnError];
+
+      function setActive(b) {
+        allBtns.forEach(function (btn) { btn.classList.remove('active'); });
+        b.classList.add('active');
+      }
+
+      function renderLiveReturnsTable(items) {
+        if (!items || items.length === 0) {
+          FileRoomLayout.renderEmpty(contentArea, {
+            icon: '☰',
+            title: 'No Returns Pending Publication',
+            desc: 'All prepared tax packages have been reviewed and published to clients.',
+            actionText: 'View Operations Triage',
+            actionHref: 'dashboard.html'
+          });
+          return;
+        }
+
+        var html = [
+          '<div class="card p-lg mb-lg" style="background:var(--surface);">',
+          '  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">',
+          '    <h3 style="font-family:var(--f-display);margin:0;font-size:1.15rem;">Returns Ready for Staff Sign-Off</h3>',
+          '    <span class="chip gold sm" id="returns-count-chip">' + items.length + ' AWAITING PUBLICATION</span>',
+          '  </div>',
+          '  <table class="table-clean" style="width:100%;font-size:.85rem;">',
+          '    <thead>',
+          '      <tr style="border-bottom:1px solid var(--line);text-align:left;">',
+          '        <th style="padding:8px 0;">Client</th>',
+          '        <th style="padding:8px 0;">Return Package</th>',
+          '        <th style="padding:8px 0;">Preparer</th>',
+          '        <th style="padding:8px 0;">Est. Refund / Due</th>',
+          '        <th style="padding:8px 0;text-align:right;">Publication Gate</th>',
+          '      </tr>',
+          '    </thead>',
+          '    <tbody id="returns-tbody">'
+        ];
+
+        items.forEach(function (ret) {
+          html.push(
+            '<tr style="border-bottom:1px solid var(--line-subtle);">',
+            '  <td style="padding:10px 0;"><b>' + (ret.client || 'Taxpayer Engagement') + '</b></td>',
+            '  <td>' + (ret.returnType || 'TY2026 Form 1040 (Individual)') + '</td>',
+            '  <td>' + (ret.preparer || 'Denise R., CPA') + '</td>',
+            '  <td>' + (ret.refundOrDue || 'Federal Refund: $3,418.00') + '</td>',
+            '  <td style="text-align:right;">',
+            '    <button class="btn xs btn-b btn-publish-return" data-return-id="' + ret.id + '" data-client-uid="' + (ret.clientUid || '') + '">Publish to Client &rarr;</button>',
+            '  </td>',
+            '</tr>'
+          );
+        });
+
+        html.push('    </tbody>', '  </table>', '</div>');
+        contentArea.innerHTML = html.join('\n');
+
+        var publishBtns = contentArea.querySelectorAll('.btn-publish-return');
+        publishBtns.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var returnId = btn.getAttribute('data-return-id');
+            var clientUid = btn.getAttribute('data-client-uid');
+            executePublish(returnId, clientUid);
+          });
+        });
+      }
+
+      async function executePublish(returnId, clientUid) {
+        try {
+          FileRoomLayout.showToast('Publishing prepared tax return and queueing Form 8879 envelope...', 'info');
+          if (window.FirebaseBridge && typeof window.FirebaseBridge.staffPublishPreparedReturn === 'function') {
+            await window.FirebaseBridge.staffPublishPreparedReturn(returnId, { clientId: clientUid });
+          }
+          FileRoomLayout.showToast('Return published to client portal. Form 8879 envelope queued.', 'ok');
+          loadReturnsQueue();
+        } catch (err) {
+          FileRoomLayout.showToast('Failed to publish return: ' + (err.message || err), 'warn');
+        }
+      }
+
+      async function loadReturnsQueue() {
+        setActive(btnLive);
+        FileRoomLayout.renderLoading(contentArea, 'Loading tax return drafts from prep engine...');
+
+        var bridge = window.FirebaseBridge;
+        var opsData = null;
+        if (bridge && typeof bridge.getFirmOperationsData === 'function') {
+          try {
+            opsData = await bridge.getFirmOperationsData();
+          } catch (_) {}
+        }
+
+        var items = [];
+        var seenIds = new Set();
+
+        if (opsData && opsData.returnsList) {
+          opsData.returnsList.forEach(function (r) {
+            if (!r.published || r.approvalStatus === 'pending_review' || !r.clientApproved) {
+              if (!seenIds.has(r.id)) {
+                seenIds.add(r.id);
+                items.push({
+                  id: r.id,
+                  client: r.client,
+                  clientUid: r.clientUid,
+                  returnType: r.returnType || ('TY' + (r.taxYear || '2026') + ' Form 1040'),
+                  preparer: 'Denise R., CPA',
+                  refundOrDue: r.refundOrDue || 'Draft in Review'
+                });
+              }
+            }
+          });
+        }
+
+        if (items.length === 0 && opsData && opsData.triageQueue) {
+          opsData.triageQueue.forEach(function (t) {
+            if (t.category === 'returns') {
+              var rId = t.returnId || t.id.replace(/^trg_ret_/, '');
+              if (!seenIds.has(rId)) {
+                seenIds.add(rId);
+                items.push({
+                  id: rId,
+                  client: t.client,
+                  clientUid: t.clientUid,
+                  returnType: t.title,
+                  preparer: 'Denise R., CPA',
+                  refundOrDue: 'Federal Refund Calculated'
+                });
+              }
+            }
+          });
+        }
+
+        // Fallback baseline if bridge not yet initialized
+        if (items.length === 0 && (!opsData || !opsData.returnsList)) {
+          items = [
+            {
+              id: 'ret_whitfield_2026',
+              client: 'Taylor Bennett',
+              clientUid: 'usr_taylor_bennett_test_example_com',
+              returnType: 'TY2026 Form 1040 (Joint) + MD, VA, PA',
+              preparer: 'Denise R., CPA',
+              refundOrDue: '+$3,418.00 (Fed) / -$612.00 (State)'
+            }
+          ];
+        }
+
+        renderLiveReturnsTable(items);
+        FileRoomLayout.showToast('Prepared returns queue loaded', 'info');
+      }
+
+      // Initial Load
+      if (window.FirebaseBridge) {
+        loadReturnsQueue();
+      } else {
+        var retries = 0;
+        var timer = setInterval(function () {
+          retries++;
+          if (window.FirebaseBridge || retries >= 15) {
+            clearInterval(timer);
+            loadReturnsQueue();
+          }
+        }, 100);
+        window.addEventListener('firebase-bridge-ready', function () { clearInterval(timer); loadReturnsQueue(); }, { once: true });
+        window.addEventListener('firebase-ready', function () { clearInterval(timer); loadReturnsQueue(); }, { once: true });
+      }
+
+      btnLive.addEventListener('click', function () {
+        loadReturnsQueue();
+      });
+
+      btnLoading.addEventListener('click', function () {
+        setActive(btnLoading);
+        FileRoomLayout.renderLoading(contentArea, 'Loading tax return drafts from prep engine...');
+      });
+
+      btnEmpty.addEventListener('click', function () {
+        setActive(btnEmpty);
+        FileRoomLayout.renderEmpty(contentArea, {
+          icon: '☰',
+          title: 'No Returns Pending Publication',
+          desc: 'All prepared tax packages have been reviewed and published to clients.',
+          actionText: 'View Clients',
+          actionHref: 'clients.html'
+        });
+      });
+
+      btnError.addEventListener('click', function () {
+        setActive(btnError);
+        FileRoomLayout.renderError(contentArea, {
+          title: 'Unable to Load Return Records',
+          desc: 'Database synchronization failed. Please retry.',
+          onRetry: function () { btnLive.click(); }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

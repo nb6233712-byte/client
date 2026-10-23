@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Action Tasks &amp; Deadlines — Firm Operations — The File Room</title>
+  <meta name="description" content="Practitioner assignments, statutory deadlines, and action items — The File Room by Pivot Aide Tax.">
+
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='22 4 156 172'%3E%3Cellipse cx='100' cy='88' rx='69' ry='67' fill='%231D3D51'/%3E%3Cellipse cx='100' cy='90' rx='59' ry='55' fill='%232C5169'/%3E%3Ccircle cx='73' cy='90' r='26' fill='%23F2F8FC'/%3E%3Ccircle cx='127' cy='90' r='26' fill='%23F2F8FC'/%3E%3Ccircle cx='73' cy='90' r='16' fill='%23019FFF'/%3E%3Ccircle cx='127' cy='90' r='16' fill='%23019FFF'/%3E%3Ccircle cx='73' cy='90' r='7.5' fill='%2306202D'/%3E%3Ccircle cx='127' cy='90' r='7.5' fill='%2306202D'/%3E%3Cpath d='M100 103 L110 121 L100 131 L90 121 Z' fill='%23EAE42F'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/app.css">
+  <link rel="stylesheet" href="../css/shared-layout.css">
+</head>
+
+<body>
+  <div class="stage desk-mode" id="stage">
+    <div class="device desk" id="device">
+      <div class="notch"><span>9:41</span><span class="dot"></span><span>●●●●</span></div>
+
+      <div class="app" id="app">
+        <header class="appbar"></header>
+
+        <div class="workspace">
+          <div class="drawer-backdrop" id="drawer-backdrop"></div>
+          <aside class="side" id="side" aria-label="Firm Operations Navigation"></aside>
+
+          <main class="body" id="body">
+            <div id="page-breadcrumbs"></div>
+
+            <div class="page-header-row">
+              <div class="page-title-wrap">
+                <h1>Action Tasks &amp; Filing Deadlines</h1>
+                <p class="page-subtitle">Practitioner Workload Distribution &middot; Circular 230 Due Diligence Deadlines</p>
+              </div>
+              <div class="page-actions-wrap">
+                <a href="dashboard.html" class="btn sm btn-o">&larr; Operations Triage</a>
+              </div>
+            </div>
+
+            <div class="states-demo-bar">
+              <span class="states-demo-label">TASKS STATE:</span>
+              <button type="button" class="states-demo-btn active" id="btn-state-live">● Live View</button>
+              <button type="button" class="states-demo-btn" id="btn-state-loading">Loading State</button>
+              <button type="button" class="states-demo-btn" id="btn-state-empty">Empty State</button>
+              <button type="button" class="states-demo-btn" id="btn-state-error">Error State</button>
+            </div>
+
+            <div id="tasks-content-area">
+              <div class="card p-lg mb-lg" style="background:var(--surface);">
+                <h3 style="font-family:var(--f-display);margin:0 0 16px 0;font-size:1.15rem;">Assigned Action Items</h3>
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--surface-2);border-radius:6px;border-left:3px solid var(--warn);">
+                    <div>
+                      <b style="font-size:.85rem;display:block;">Review Closing Disclosure — 214 Halcyon Row</b>
+                      <span style="font-size:.75rem;color:var(--ink-2);">Assigned to Denise R., CPA &middot; Client: Michael Whitfield &middot; Due: Today</span>
+                    </div>
+                    <button class="btn xs btn-b" onclick="FileRoomLayout.showToast('Navigating to review queue', 'info'); window.location.href='documents.html'">Review &rarr;</button>
+                  </div>
+
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--surface-2);border-radius:6px;border-left:3px solid var(--gold);">
+                    <div>
+                      <b style="font-size:.85rem;display:block;">Follow up on Missing 1099-MISC</b>
+                      <span style="font-size:.75rem;color:var(--ink-2);">Client: Michael Whitfield &middot; 6 days overdue &middot; Action: SMS Reminder</span>
+                    </div>
+                    <button class="btn xs btn-o" onclick="FileRoomLayout.showToast('Reminder notification queued', 'ok')">Remind</button>
+                  </div>
+
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--surface-2);border-radius:6px;border-left:3px solid var(--danger);">
+                    <div>
+                      <b style="font-size:.85rem;display:block;">Wet-Signature Fallback Mail Packet</b>
+                      <span style="font-size:.75rem;color:var(--ink-2);">Client: Brennan Holdings LLC &middot; Reason: KBA lockout 3/3 attempts exceeded</span>
+                    </div>
+                    <button class="btn xs btn-b" onclick="FileRoomLayout.showToast('IRS wet-signature dispatch initiated', 'ok')">Generate Packet</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-backdrop">
+    <div class="modal-card modal-wide" id="modal-container"></div>
+  </div>
+  <div id="toast-container" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/firebase.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/core/layout.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      FileRoomLayout.init({
+        portal: 'firm',
+        activePage: 'tasks',
+        breadcrumbs: [
+          { title: 'The File Room', href: '../index.html' },
+          { title: 'Firm Operations', href: 'dashboard.html' },
+          { title: 'Action Tasks' }
+        ]
+      });
+
+      var contentArea = document.getElementById('tasks-content-area');
+
+      // RBAC Gate
+      var savedSession = null;
+      try {
+        var raw = localStorage.getItem('tfr_user_session');
+        if (raw) savedSession = JSON.parse(raw);
+      } catch (_) {}
+      var bridgeUser = (window.FirebaseBridge && window.FirebaseBridge.currentUser);
+      var user = (window.AuthGuard && window.AuthGuard.getAuthState && window.AuthGuard.getAuthState()) ||
+                 bridgeUser || savedSession || (window.FileRoomLayout && window.FileRoomLayout.resolveUser('firm'));
+      var isStaff = FileRoomLayout.isStaffUser ? FileRoomLayout.isStaffUser(user) : Boolean(
+        user && (
+          user.role === 'firm_admin' ||
+          user.role === 'firm_preparer' ||
+          user.role === 'firm_staff' ||
+          user.isStaff ||
+          (user.email && (user.email.endsWith('@pivot-aide-tax.com') || user.email.endsWith('@pivot-aide.tax') || user.email.includes('cpa') || user.email.includes('preparer') || user.email.includes('denise') || user.email.includes('admin') || user.email.includes('partner') || user.email.includes('jordan')))
+        )
+      );
+
+      if (!isStaff) {
+        FileRoomLayout.renderAccessDenied(contentArea, {
+          title: '403 FORBIDDEN · ACCESS RESTRICTED',
+          message: 'Staff credentials and verified Multi-Factor Authentication (MFA) are required to access Firm Operations Console under FTC Safeguards § 314.4.',
+          loginUrl: '../index.html'
+        });
+        return;
+      }
+
+      var originalHtml = contentArea.innerHTML;
+      var btnLive = document.getElementById('btn-state-live');
+      var btnLoading = document.getElementById('btn-state-loading');
+      var btnEmpty = document.getElementById('btn-state-empty');
+      var btnError = document.getElementById('btn-state-error');
+      var allBtns = [btnLive, btnLoading, btnEmpty, btnError];
+
+      function setActive(b) {
+        allBtns.forEach(function (btn) { btn.classList.remove('active'); });
+        b.classList.add('active');
+      }
+
+      btnLive.addEventListener('click', function () {
+        setActive(btnLive);
+        contentArea.innerHTML = originalHtml;
+        FileRoomLayout.showToast('Practitioner action tasks loaded', 'info');
+      });
+
+      btnLoading.addEventListener('click', function () {
+        setActive(btnLoading);
+        FileRoomLayout.renderLoading(contentArea, 'Loading assigned tasks and upcoming deadlines...');
+      });
+
+      btnEmpty.addEventListener('click', function () {
+        setActive(btnEmpty);
+        FileRoomLayout.renderEmpty(contentArea, {
+          icon: '📋',
+          title: 'All Tasks Completed',
+          desc: 'No pending action tasks assigned to your practitioner queue.',
+          actionText: 'View Dashboard',
+          actionHref: 'dashboard.html'
+        });
+      });
+
+      btnError.addEventListener('click', function () {
+        setActive(btnError);
+        FileRoomLayout.renderError(contentArea, {
+          title: 'Unable to Load Tasks',
+          desc: 'Failed to retrieve task assignments. Please retry.',
+          onRetry: function () { btnLive.click(); }
+        });
+      });
+
+      window.addEventListener('firebase-bridge-ready', function () {
+        if (btnLive) btnLive.click();
+      }, { once: true });
+      window.addEventListener('firebase-ready', function () {
+        if (btnLive) btnLive.click();
+      }, { once: true });
+    });
+  </script>
+</body>
+
+</html>

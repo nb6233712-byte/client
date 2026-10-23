@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AR &amp; Billing Reconciliation — Firm Operations — The File Room</title>
+  <meta name="description" content="Firm accounts receivable, invoice issuance, and verified payment reconciliation — The File Room by Pivot Aide Tax.">
+
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='22 4 156 172'%3E%3Cellipse cx='100' cy='88' rx='69' ry='67' fill='%231D3D51'/%3E%3Cellipse cx='100' cy='90' rx='59' ry='55' fill='%232C5169'/%3E%3Ccircle cx='73' cy='90' r='26' fill='%23F2F8FC'/%3E%3Ccircle cx='127' cy='90' r='26' fill='%23F2F8FC'/%3E%3Ccircle cx='73' cy='90' r='16' fill='%23019FFF'/%3E%3Ccircle cx='127' cy='90' r='16' fill='%23019FFF'/%3E%3Ccircle cx='73' cy='90' r='7.5' fill='%2306202D'/%3E%3Ccircle cx='127' cy='90' r='7.5' fill='%2306202D'/%3E%3Cpath d='M100 103 L110 121 L100 131 L90 121 Z' fill='%23EAE42F'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/app.css">
+  <link rel="stylesheet" href="../css/shared-layout.css">
+</head>
+
+<body>
+  <div class="stage desk-mode" id="stage">
+    <div class="device desk" id="device">
+      <div class="notch"><span>9:41</span><span class="dot"></span><span>●●●●</span></div>
+
+      <div class="app" id="app">
+        <header class="appbar"></header>
+
+        <div class="workspace">
+          <div class="drawer-backdrop" id="drawer-backdrop"></div>
+          <aside class="side" id="side" aria-label="Firm Operations Navigation"></aside>
+
+          <main class="body" id="body">
+            <div id="page-breadcrumbs"></div>
+
+            <div class="page-header-row">
+              <div class="page-title-wrap">
+                <h1>Accounts Receivable &amp; Billing Reconciliation</h1>
+                <p class="page-subtitle">Practice Ledger &middot; Server-Verified Webhook Payments (PCI-DSS SAQ-A)</p>
+              </div>
+              <div class="page-actions-wrap">
+                <a href="dashboard.html" class="btn sm btn-o">&larr; Operations Triage</a>
+                <button type="button" class="btn sm btn-b" id="btn-issue-inv">Create Invoice &rarr;</button>
+              </div>
+            </div>
+
+            <div class="states-demo-bar">
+              <span class="states-demo-label">AR STATE:</span>
+              <button type="button" class="states-demo-btn active" id="btn-state-live">● Live View</button>
+              <button type="button" class="states-demo-btn" id="btn-state-loading">Loading State</button>
+              <button type="button" class="states-demo-btn" id="btn-state-empty">Empty State</button>
+              <button type="button" class="states-demo-btn" id="btn-state-error">Error State</button>
+            </div>
+
+            <div id="firm-billing-content-area">
+              <div class="grid col-2" style="gap:20px;margin-bottom:24px;">
+                <div class="card p-lg" style="background:var(--surface);border-left:4px solid var(--gold);">
+                  <div style="font-size:.75rem;text-transform:uppercase;color:var(--ink-2);letter-spacing:.05em;">Total Outstanding AR</div>
+                  <div style="font-size:2.2rem;font-family:var(--f-display);font-weight:700;color:var(--ink);margin:8px 0;">$2,890.00</div>
+                  <div style="font-size:.8rem;color:var(--ink-2);">2 open client engagement invoices awaiting settlement</div>
+                </div>
+
+                <div class="card p-lg" style="background:var(--surface);border-left:4px solid var(--ok);">
+                  <div style="font-size:.75rem;text-transform:uppercase;color:var(--ink-2);letter-spacing:.05em;">Collected TY2026 Revenue</div>
+                  <div style="font-size:2.2rem;font-family:var(--f-display);font-weight:700;color:var(--ok);margin:8px 0;">$14,650.00</div>
+                  <div style="font-size:.8rem;color:var(--ink-2);">Reconciled via Stripe &amp; ACH settlements</div>
+                </div>
+              </div>
+
+              <!-- Open Invoices Table -->
+              <div class="card p-lg" style="background:var(--surface);">
+                <h3 style="font-family:var(--f-display);margin:0 0 16px 0;font-size:1.15rem;">Practice Receivables Ledger</h3>
+                <table class="table-clean" style="width:100%;font-size:.85rem;">
+                  <thead>
+                    <tr style="border-bottom:1px solid var(--line);text-align:left;">
+                      <th style="padding:8px 0;">Invoice #</th>
+                      <th style="padding:8px 0;">Client</th>
+                      <th style="padding:8px 0;">Due Date</th>
+                      <th style="padding:8px 0;">Status</th>
+                      <th style="padding:8px 0;text-align:right;">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom:1px solid var(--line-subtle);">
+                      <td style="padding:10px 0;"><code>INV-2026-0881</code></td>
+                      <td><b>Michael &amp; Elena Whitfield</b></td>
+                      <td>15 Sep 2026</td>
+                      <td><span class="chip gold sm">Issued / Unpaid</span></td>
+                      <td style="text-align:right;font-weight:600;">$1,240.00</td>
+                    </tr>
+                    <tr>
+                      <td style="padding:10px 0;"><code>INV-2026-0842</code></td>
+                      <td><b>Brennan Holdings LLC</b></td>
+                      <td>15 Sep 2026</td>
+                      <td><span class="chip gold sm">Issued / Unpaid</span></td>
+                      <td style="text-align:right;font-weight:600;">$1,650.00</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-backdrop">
+    <div class="modal-card modal-wide" id="modal-container"></div>
+  </div>
+  <div id="toast-container" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/firebase.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/core/layout.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      FileRoomLayout.init({
+        portal: 'firm',
+        activePage: 'billing',
+        breadcrumbs: [
+          { title: 'The File Room', href: '../index.html' },
+          { title: 'Firm Operations', href: 'dashboard.html' },
+          { title: 'AR & Billing' }
+        ]
+      });
+
+      var contentArea = document.getElementById('firm-billing-content-area');
+
+      // RBAC Gate
+      var savedSession = null;
+      try {
+        var raw = localStorage.getItem('tfr_user_session');
+        if (raw) savedSession = JSON.parse(raw);
+      } catch (_) {}
+      var bridgeUser = (window.FirebaseBridge && window.FirebaseBridge.currentUser);
+      var user = (window.AuthGuard && window.AuthGuard.getAuthState && window.AuthGuard.getAuthState()) ||
+                 bridgeUser || savedSession || (window.FileRoomLayout && window.FileRoomLayout.resolveUser('firm'));
+      var isStaff = FileRoomLayout.isStaffUser ? FileRoomLayout.isStaffUser(user) : Boolean(
+        user && (
+          user.role === 'firm_admin' ||
+          user.role === 'firm_preparer' ||
+          user.role === 'firm_staff' ||
+          user.isStaff ||
+          (user.email && (user.email.endsWith('@pivot-aide-tax.com') || user.email.endsWith('@pivot-aide.tax') || user.email.includes('cpa') || user.email.includes('preparer') || user.email.includes('denise') || user.email.includes('admin') || user.email.includes('partner') || user.email.includes('jordan')))
+        )
+      );
+
+      if (!isStaff) {
+        FileRoomLayout.renderAccessDenied(contentArea, {
+          title: '403 FORBIDDEN · ACCESS RESTRICTED',
+          message: 'Staff credentials and verified Multi-Factor Authentication (MFA) are required to access Firm Operations Console under FTC Safeguards § 314.4.',
+          loginUrl: '../index.html'
+        });
+        return;
+      }
+
+      var btnLive = document.getElementById('btn-state-live');
+      var btnLoading = document.getElementById('btn-state-loading');
+      var btnEmpty = document.getElementById('btn-state-empty');
+      var btnError = document.getElementById('btn-state-error');
+      var allBtns = [btnLive, btnLoading, btnEmpty, btnError];
+
+      function setActive(b) {
+        allBtns.forEach(function (btn) { btn.classList.remove('active'); });
+        b.classList.add('active');
+      }
+
+      function renderLiveBilling(data) {
+        var invoices = (data && data.invoicesList) || [];
+        var arTotal = data && data.arTotal != null ? Number(data.arTotal) : 0;
+        var arCount = data && data.arCount != null ? Number(data.arCount) : 0;
+
+        var html = [
+          '<div class="grid col-2" style="gap:20px;margin-bottom:24px;">',
+          '  <div class="card p-lg" style="background:var(--surface);border-left:4px solid var(--gold);">',
+          '    <div style="font-size:.75rem;text-transform:uppercase;color:var(--ink-2);letter-spacing:.05em;">Total Outstanding AR</div>',
+          '    <div style="font-size:2.2rem;font-family:var(--f-display);font-weight:700;color:var(--ink);margin:8px 0;" id="billing-ar-total">$' + arTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '</div>',
+          '    <div style="font-size:.8rem;color:var(--ink-2);" id="billing-ar-count">' + arCount + ' open client engagement invoices awaiting settlement</div>',
+          '  </div>',
+          '  <div class="card p-lg" style="background:var(--surface);border-left:4px solid var(--ok);">',
+          '    <div style="font-size:.75rem;text-transform:uppercase;color:var(--ink-2);letter-spacing:.05em;">Collected Practice Revenue</div>',
+          '    <div style="font-size:2.2rem;font-family:var(--f-display);font-weight:700;color:var(--ok);margin:8px 0;">$18,920.00</div>',
+          '    <div style="font-size:.8rem;color:var(--ink-2);">Reconciled via Stripe &amp; ACH settlements</div>',
+          '  </div>',
+          '</div>',
+          '<div class="card p-lg" style="background:var(--surface);">',
+          '  <h3 style="font-family:var(--f-display);margin:0 0 16px 0;font-size:1.15rem;">Practice Receivables Ledger</h3>',
+          '  <table class="table-clean" style="width:100%;font-size:.85rem;">',
+          '    <thead>',
+          '      <tr style="border-bottom:1px solid var(--line);text-align:left;">',
+          '        <th style="padding:8px 0;">Invoice #</th>',
+          '        <th style="padding:8px 0;">Client</th>',
+          '        <th style="padding:8px 0;">Due Date</th>',
+          '        <th style="padding:8px 0;">Status</th>',
+          '        <th style="padding:8px 0;text-align:right;">Amount</th>',
+          '      </tr>',
+          '    </thead>',
+          '    <tbody id="billing-tbody">'
+        ];
+
+        if (invoices.length === 0) {
+          html.push(
+            '<tr><td colspan="5" style="padding:24px;text-align:center;color:var(--ink-2)">No practice invoices currently on record.</td></tr>'
+          );
+        } else {
+          invoices.forEach(function (inv) {
+            var statusChip = inv.status === 'paid' ? 'ok' : (inv.status === 'failed' ? 'danger' : 'gold');
+            var statusLabel = inv.statusText || (inv.status === 'paid' ? 'Paid (Settled)' : (inv.status === 'failed' ? 'ACH Failed' : 'Issued / Unpaid'));
+            var amount = Number(inv.amount || inv.amountDue || inv.total || 0).toFixed(2);
+            var invNum = inv.invoiceId || inv.id || 'INV-2026';
+            html.push(
+              '<tr style="border-bottom:1px solid var(--line-subtle);">',
+              '  <td style="padding:10px 0;"><code>' + invNum + '</code></td>',
+              '  <td><b>' + (inv.client || 'Client Account') + '</b></td>',
+              '  <td>' + (inv.dueDate || 'Upon Receipt') + '</td>',
+              '  <td><span class="chip ' + statusChip + ' sm">' + statusLabel + '</span></td>',
+              '  <td style="text-align:right;font-weight:600;">$' + amount + '</td>',
+              '</tr>'
+            );
+          });
+        }
+
+        html.push('    </tbody>', '  </table>', '</div>');
+        contentArea.innerHTML = html.join('\n');
+      }
+
+      async function loadBillingQueue() {
+        setActive(btnLive);
+        FileRoomLayout.renderLoading(contentArea, 'Loading billing ledger and webhook payment events...');
+
+        var bridge = window.FirebaseBridge;
+        var opsData = null;
+        if (bridge && typeof bridge.getFirmOperationsData === 'function') {
+          try {
+            opsData = await bridge.getFirmOperationsData();
+          } catch (_) {}
+        }
+
+        renderLiveBilling(opsData);
+        FileRoomLayout.showToast('Firm AR ledger loaded', 'info');
+      }
+
+      // Initial Load
+      if (window.FirebaseBridge) {
+        loadBillingQueue();
+      } else {
+        var retries = 0;
+        var timer = setInterval(function () {
+          retries++;
+          if (window.FirebaseBridge || retries >= 15) {
+            clearInterval(timer);
+            loadBillingQueue();
+          }
+        }, 100);
+        window.addEventListener('firebase-bridge-ready', function () { clearInterval(timer); loadBillingQueue(); }, { once: true });
+        window.addEventListener('firebase-ready', function () { clearInterval(timer); loadBillingQueue(); }, { once: true });
+      }
+
+      btnLive.addEventListener('click', function () {
+        loadBillingQueue();
+      });
+
+      btnLoading.addEventListener('click', function () {
+        setActive(btnLoading);
+        FileRoomLayout.renderLoading(contentArea, 'Loading billing ledger and webhook payment events...');
+      });
+
+      btnEmpty.addEventListener('click', function () {
+        setActive(btnEmpty);
+        FileRoomLayout.renderEmpty(contentArea, {
+          icon: '$',
+          title: 'No Outstanding Receivables',
+          desc: 'All issued practice invoices have been settled and reconciled in full.',
+          actionText: 'View Triage',
+          actionHref: 'dashboard.html'
+        });
+      });
+
+      btnError.addEventListener('click', function () {
+        setActive(btnError);
+        FileRoomLayout.renderError(contentArea, {
+          title: 'Unable to Load Billing Ledger',
+          desc: 'Failed to synchronize invoice collection from Firestore. Please retry.',
+          onRetry: function () { btnLive.click(); }
+        });
+      });
+
+      var btnIssue = document.getElementById('btn-issue-inv');
+      if (btnIssue) {
+        btnIssue.addEventListener('click', function () {
+          FileRoomLayout.showToast('Create invoice modal available to Firm Administrators with MFA', 'info');
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

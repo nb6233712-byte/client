@@ -1,0 +1,87 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "document_delivery_queue",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status",        "order": "ASCENDING"  },
+        { "fieldPath": "nextAttemptAt", "order": "ASCENDING"  }
+      ]
+    },
+    {
+      "collectionGroup": "document_delivery_queue",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "clientId",      "order": "ASCENDING"  },
+        { "fieldPath": "status",        "order": "ASCENDING"  },
+        { "fieldPath": "createdAt",     "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "document_delivery_queue",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status",        "order": "ASCENDING"  },
+        { "fieldPath": "createdAt",     "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "document_delivery_queue",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "idempotencyKey", "order": "ASCENDING" },
+        { "fieldPath": "createdAt",      "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "document_delivery_queue",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "leaseExpiresAt", "order": "ASCENDING"  },
+        { "fieldPath": "status",         "order": "ASCENDING"  }
+      ]
+    },
+    {
+      "collectionGroup": "delivery_queue",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "state",         "order": "ASCENDING"  },
+        { "fieldPath": "nextAttemptAt", "order": "ASCENDING"  }
+      ]
+    },
+    {
+      "collectionGroup": "delivery_queue",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "clientUid",     "order": "ASCENDING"  },
+        { "fieldPath": "state",         "order": "ASCENDING"  },
+        { "fieldPath": "createdAt",     "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "delivery_queue",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "state",         "order": "ASCENDING"  },
+        { "fieldPath": "createdAt",     "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "delivery_queue",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "idempotencyKey", "order": "ASCENDING" },
+        { "fieldPath": "createdAt",      "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "delivery_queue",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "leaseExpiresAt", "order": "ASCENDING"  },
+        { "fieldPath": "state",         "order": "ASCENDING"  }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

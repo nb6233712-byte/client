@@ -1,0 +1,1245 @@
+<!-- ==========================================================================
+     THE FILE ROOM (PIVOT AIDE TAX) — MODULAR AUTHENTICATION VIEWS
+     Uncle Pat Mascot Header · Google OAuth · Floating Labels · OTP Advancement
+     ========================================================================== -->
+
+<div class="pat-auth-card-wrapper">
+  <!-- Elevated Dark-Slate Glassmorphism Card -->
+  <div class="pat-auth-card mode-client" id="pat-auth-component" role="region" aria-label="Pivot Aide Tax Authentication">
+    
+    <!-- Top Accent Bar: Gradient Glow -->
+    <div class="pat-card-accent-bar" id="pat-card-accent"></div>
+
+    <!-- 1. UNCLE PAT BRAND HEADER -->
+    <header class="pat-auth-header">
+      <div class="pat-mascot-badge">
+        <!-- Uncle Pat Mascot SVG: Navy Owl, White Collared Shirt, Gold Tie, Expressive Circular Eyes -->
+        <svg class="pat-mascot-svg" viewBox="22 4 156 172" width="72" height="72" aria-label="Uncle Pat Mascot" role="img">
+          <!-- Torso (Navy Plumage) -->
+          <path d="M100 128 C140 128 172 150 184 186 C188 198 190 209 190 220 L10 220 C10 209 12 198 16 186 C28 150 60 128 100 128 Z" fill="#1D3D51" />
+          <!-- White shirt behind collar -->
+          <path d="M66 128 L134 128 L100 184 Z" fill="#FFFFFF" />
+          <!-- Crisp Shirt Collar Flaps -->
+          <path d="M63 141 L100 170 L79 199 L43 161 Z" fill="#FFFFFF" />
+          <path d="M137 141 L100 170 L121 199 L157 161 Z" fill="#FFFFFF" />
+          <!-- Signature Yellow / Gold Tie Knot & Blade -->
+          <path d="M89 150 L111 150 L116 178 L84 178 Z" fill="#CFC922" />
+          <path d="M84 178 L116 178 L110 202 L100 214 L90 202 Z" fill="#EAE42F" />
+          <!-- Ear Tufts -->
+          <path d="M52 46 L46 10 L88 34 Z" fill="#16303F" />
+          <path d="M148 46 L154 10 L112 34 Z" fill="#16303F" />
+          <!-- Head Base & Facial Disc -->
+          <ellipse cx="100" cy="88" rx="69" ry="67" fill="#1D3D51" />
+          <ellipse cx="100" cy="90" rx="59" ry="55" fill="#2C5169" />
+          <!-- Brow Feathering -->
+          <path d="M100 44 C132 44 152 60 156 82 C146 66 126 57 100 57 C74 57 54 66 44 82 C48 60 68 44 100 44 Z" fill="#24455B" />
+          <!-- Large Expressive Eyes (Outer White, Cyan Iris, Deep Navy Pupils) -->
+          <circle cx="73" cy="90" r="26" fill="#F2F8FC" />
+          <circle cx="127" cy="90" r="26" fill="#F2F8FC" />
+          <circle cx="73" cy="90" r="16" fill="#019FFF" />
+          <circle cx="127" cy="90" r="16" fill="#019FFF" />
+          <circle cx="73" cy="90" r="7.5" fill="#06202D" />
+          <circle cx="127" cy="90" r="7.5" fill="#06202D" />
+          <circle cx="78" cy="85" r="3" fill="#FFFFFF" opacity="0.85" />
+          <circle cx="132" cy="85" r="3" fill="#FFFFFF" opacity="0.85" />
+          <!-- Gold Beak -->
+          <path d="M100 103 L110 121 L100 131 L90 121 Z" fill="#EAE42F" />
+          <path d="M100 121 L110 121 L100 131 Z" fill="#B4AE18" opacity=".45" />
+        </svg>
+      </div>
+
+      <div class="pat-brand-meta">
+        <h1 class="pat-brand-title">Pivot Aide <span class="gold-gradient-text">Tax</span></h1>
+        <p class="pat-brand-subtitle">The File Room &middot; Secure Access</p>
+        <div class="pat-statute-pill">
+          <span class="pat-lock-icon">🔒</span>
+          <span>FTC Safeguards &middot; IRS Pub 1345 WORM Vault</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- 2. PRIMARY TAB SWITCHER: CLIENT PORTAL VS. FIRM OPERATIONS -->
+    <nav class="pat-portal-tabs" role="tablist" aria-label="Portal Selection">
+      <button type="button" class="pat-portal-tab active" id="tab-portal-client" role="tab" aria-selected="true" aria-controls="view-client-portal" data-portal="client">
+        <span class="portal-tab-icon">👤</span>
+        <span class="portal-tab-label">Client Portal</span>
+      </button>
+      <button type="button" class="pat-portal-tab" id="tab-portal-firm" role="tab" aria-selected="false" aria-controls="view-firm-portal" data-portal="firm">
+        <span class="portal-tab-icon">⚙️</span>
+        <span class="portal-tab-label">Firm Operations</span>
+      </button>
+    </nav>
+
+    <!-- 3. SECONDARY ACTION TOGGLE: SIGN IN VS. CREATE ACCOUNT (CLIENT MODE) -->
+    <div class="pat-action-switcher" id="pat-client-action-switcher" role="group" aria-label="Client Authentication Mode">
+      <button type="button" class="pat-action-btn active" id="btn-mode-signin" data-mode="signin">
+        Sign In
+      </button>
+      <button type="button" class="pat-action-btn" id="btn-mode-signup" data-mode="signup">
+        Create Account
+      </button>
+    </div>
+
+    <!-- Alert / Feedback Banner -->
+    <div class="pat-feedback-banner" id="pat-auth-feedback" role="alert" style="display:none;"></div>
+
+    <!-- ======================================================================
+         VIEW A: CLIENT PORTAL (TAXPAYER ACCESS)
+         ====================================================================== -->
+    <div class="pat-view-container" id="view-client-portal" role="tabpanel" aria-labelledby="tab-portal-client">
+      
+      <!-- ==================== SUB-VIEW A1: CLIENT SIGN-IN FORM ==================== -->
+      <div class="pat-form-wrapper active" id="wrap-client-signin">
+        
+        <!-- Google OAuth Button -->
+        <button type="button" class="pat-google-btn" id="btn-google-client-signin">
+          <svg class="pat-google-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
+            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+            <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.97 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+          </svg>
+          <span>Continue with Google</span>
+        </button>
+
+        <!-- Divider -->
+        <div class="pat-auth-divider">
+          <span class="pat-divider-line"></span>
+          <span class="pat-divider-text">&mdash; or continue with email &mdash;</span>
+          <span class="pat-divider-line"></span>
+        </div>
+
+        <form class="pat-form" id="pat-client-signin-form" autocomplete="on">
+          <!-- Floating Label: Email -->
+          <div class="pat-float-group">
+            <input type="email" id="client-login-email" class="pat-float-input" placeholder=" " value="m.whitfield@example.com" required autocomplete="username">
+            <label for="client-login-email" class="pat-float-label">Email Address</label>
+            <span class="pat-input-highlight"></span>
+          </div>
+
+          <!-- Floating Label: Password with Eye Toggle -->
+          <div class="pat-float-group pat-has-password-toggle">
+            <input type="password" id="client-login-pass" class="pat-float-input" placeholder=" " value="TaxpayerPass2025#" required autocomplete="current-password">
+            <label for="client-login-pass" class="pat-float-label">Password</label>
+            <button type="button" class="pat-pwd-toggle-btn" aria-label="Toggle password visibility" data-target="client-login-pass" tabindex="-1">
+              <svg class="pat-eye-icon pat-eye-open" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <svg class="pat-eye-icon pat-eye-closed" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            </button>
+            <span class="pat-input-highlight"></span>
+          </div>
+
+          <!-- Forgot Password Link -->
+          <div class="pat-field-aux">
+            <a href="#forgot-password" class="pat-forgot-link" id="link-forgot-password-client">Forgot password?</a>
+          </div>
+
+          <!-- FTC Safeguards Rule Compliant Step 2 (MFA) Challenge Container -->
+          <div class="pat-challenge-box" id="mfa-client-container">
+            <div class="pat-challenge-header">
+              <span class="pat-challenge-title">🔐 Step 2 MFA Challenge (FTC Safeguards § 314.4)</span>
+              <span class="pat-challenge-badge">6-Digit Code</span>
+            </div>
+            <div class="pat-otp-grid" id="otp-grid-client" data-paste-support="true">
+              <input type="text" maxlength="1" class="pat-otp-cell" value="4" inputmode="numeric" pattern="[0-9]" data-idx="0" aria-label="MFA digit 1">
+              <input type="text" maxlength="1" class="pat-otp-cell" value="9" inputmode="numeric" pattern="[0-9]" data-idx="1" aria-label="MFA digit 2">
+              <input type="text" maxlength="1" class="pat-otp-cell" value="2" inputmode="numeric" pattern="[0-9]" data-idx="2" aria-label="MFA digit 3">
+              <input type="text" maxlength="1" class="pat-otp-cell" value="8" inputmode="numeric" pattern="[0-9]" data-idx="3" aria-label="MFA digit 4">
+              <input type="text" maxlength="1" class="pat-otp-cell" value="1" inputmode="numeric" pattern="[0-9]" data-idx="4" aria-label="MFA digit 5">
+              <input type="text" maxlength="1" class="pat-otp-cell" value="7" inputmode="numeric" pattern="[0-9]" data-idx="5" aria-label="MFA digit 6">
+            </div>
+            <p class="pat-challenge-hint">Auto-advances on keystroke &middot; Clipboard paste enabled &middot; AES-256 custody</p>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="pat-submit-btn client-btn" id="btn-submit-client-signin">
+            <span>Sign In to Client Portal</span>
+            <span class="pat-btn-arrow">&rarr;</span>
+          </button>
+
+          <!-- Quick Demo Taxpayer Action -->
+          <div class="pat-demo-bar">
+            <button type="button" class="pat-demo-btn gold-accent" id="btn-quick-taxpayer">
+              ⚡ Quick Demo Taxpayer (Michael Whitfield)
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ==================== SUB-VIEW A2: CLIENT SIGN-UP FORM ==================== -->
+      <div class="pat-form-wrapper" id="wrap-client-signup" style="display:none;">
+        
+        <!-- Google OAuth Button for Sign Up -->
+        <button type="button" class="pat-google-btn" id="btn-google-client-signup">
+          <svg class="pat-google-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
+            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+            <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.97 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+          </svg>
+          <span>Continue with Google</span>
+        </button>
+
+        <!-- Divider -->
+        <div class="pat-auth-divider">
+          <span class="pat-divider-line"></span>
+          <span class="pat-divider-text">&mdash; or continue with email &mdash;</span>
+          <span class="pat-divider-line"></span>
+        </div>
+
+        <form class="pat-form" id="pat-client-signup-form" autocomplete="on">
+          <!-- Full Name -->
+          <div class="pat-float-group">
+            <input type="text" id="client-reg-name" class="pat-float-input" placeholder=" " required autocomplete="name">
+            <label for="client-reg-name" class="pat-float-label">Full Legal Name</label>
+            <span class="pat-input-highlight"></span>
+          </div>
+
+          <!-- Email Address -->
+          <div class="pat-float-group">
+            <input type="email" id="client-reg-email" class="pat-float-input" placeholder=" " required autocomplete="email">
+            <label for="client-reg-email" class="pat-float-label">Email Address</label>
+            <span class="pat-input-highlight"></span>
+          </div>
+
+          <!-- Password with Eye Toggle -->
+          <div class="pat-float-group pat-has-password-toggle">
+            <input type="password" id="client-reg-pass" class="pat-float-input" placeholder=" " required autocomplete="new-password">
+            <label for="client-reg-pass" class="pat-float-label">Password (Min 8 Characters)</label>
+            <button type="button" class="pat-pwd-toggle-btn" aria-label="Toggle password visibility" data-target="client-reg-pass" tabindex="-1">
+              <svg class="pat-eye-icon pat-eye-open" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <svg class="pat-eye-icon pat-eye-closed" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            </button>
+            <span class="pat-input-highlight"></span>
+          </div>
+
+          <!-- Confirm Password with Eye Toggle -->
+          <div class="pat-float-group pat-has-password-toggle">
+            <input type="password" id="client-reg-confirm" class="pat-float-input" placeholder=" " required autocomplete="new-password">
+            <label for="client-reg-confirm" class="pat-float-label">Confirm Password</label>
+            <button type="button" class="pat-pwd-toggle-btn" aria-label="Toggle password visibility" data-target="client-reg-confirm" tabindex="-1">
+              <svg class="pat-eye-icon pat-eye-open" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <svg class="pat-eye-icon pat-eye-closed" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
+            </button>
+            <span class="pat-input-highlight"></span>
+          </div>
+
+          <!-- Mandatory IRC § 7216 Taxpayer Privacy Disclosure Consent Checkbox -->
+          <div class="pat-consent-wrap">
+            <label class="pat-consent-checkbox-label">
+              <input type="checkbox" id="client-signup-consent" required>
+              <span class="pat-custom-check"></span>
+              <span class="pat-consent-text">
+                <b>IRC &sect; 7216 Consent:</b> I affirmatively authorize Pivot Aide Tax to retain and transmit my electronic tax documentation solely for return preparation under Treas. Reg. &sect; 301.7216-3, IRS Pub 1345, and FTC Safeguards &sect; 314.4.
+              </span>
+            </label>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="pat-submit-btn client-btn" id="btn-submit-client-signup">
+            <span>Create Account &amp; Open Tax File</span>
+            <span class="pat-btn-arrow">&rarr;</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         VIEW B: FIRM OPERATIONS TAB (PRACTITIONERS & STAFF)
+         ====================================================================== -->
+    <div class="pat-view-container" id="view-firm-portal" role="tabpanel" aria-labelledby="tab-portal-firm" style="display:none;">
+      
+      <!-- Domain Restriction Badge -->
+      <div class="pat-domain-banner">
+        <span class="pat-domain-badge">🔒 Practitioners Only</span>
+        <span class="pat-domain-desc">Authorized domain check enforced: <b>@pivot-aide-tax.com</b></span>
+      </div>
+
+      <!-- Google Sign-In with Domain Check Enforcement -->
+      <button type="button" class="pat-google-btn firm-google" id="btn-google-firm-signin" title="Sign in with Google Workspace (@pivot-aide-tax.com)">
+        <svg class="pat-google-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
+          <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+          <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.97 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+          <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+        </svg>
+        <span>Sign in with Google Workspace</span>
+      </button>
+
+      <!-- Divider -->
+      <div class="pat-auth-divider">
+        <span class="pat-divider-line"></span>
+        <span class="pat-divider-text">&mdash; or continue with staff credentials &mdash;</span>
+        <span class="pat-divider-line"></span>
+      </div>
+
+      <!-- Practitioner Login Form -->
+      <form class="pat-form" id="pat-firm-signin-form" autocomplete="on">
+        
+        <!-- Firm Email -->
+        <div class="pat-float-group">
+          <input type="email" id="firm-login-email" class="pat-float-input" placeholder=" " value="denise@pivot-aide-tax.com" required autocomplete="username" pattern=".+@pivot-aide-tax\.com|.+@pivot-aide\.tax">
+          <label for="firm-login-email" class="pat-float-label">Firm Email (@pivot-aide-tax.com)</label>
+          <span class="pat-input-highlight firm"></span>
+        </div>
+
+        <!-- Master Password with Eye Toggle -->
+        <div class="pat-float-group pat-has-password-toggle">
+          <input type="password" id="firm-login-pass" class="pat-float-input" placeholder=" " value="SupervisoryPass2025#" required autocomplete="current-password">
+          <label for="firm-login-pass" class="pat-float-label">Master Password</label>
+          <button type="button" class="pat-pwd-toggle-btn" aria-label="Toggle password visibility" data-target="firm-login-pass" tabindex="-1">
+            <svg class="pat-eye-icon pat-eye-open" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <svg class="pat-eye-icon pat-eye-closed" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+              <line x1="1" y1="1" x2="23" y2="23"></line>
+            </svg>
+          </button>
+          <span class="pat-input-highlight firm"></span>
+        </div>
+
+        <!-- Forgot Password Link -->
+        <div class="pat-field-aux">
+          <a href="#staff-key-recovery" class="pat-forgot-link" id="link-forgot-password-firm">Reset staff credentials?</a>
+        </div>
+
+        <!-- PTIN / Staff Credential ID -->
+        <div class="pat-float-group">
+          <input type="text" id="firm-login-ptin" class="pat-float-input pat-mono" placeholder=" " value="P01489240" maxlength="12" required>
+          <label for="firm-login-ptin" class="pat-float-label">PTIN / Staff Credential ID</label>
+          <span class="pat-input-highlight firm"></span>
+        </div>
+
+        <!-- Mandatory NIST AAL2 2FA Challenge Box -->
+        <div class="pat-challenge-box firm" id="mfa-firm-container">
+          <div class="pat-challenge-header">
+            <span class="pat-challenge-title">🔐 Mandatory NIST AAL2 2FA (Hardware / TOTP)</span>
+            <span class="pat-challenge-badge firm">6-Digit Code</span>
+          </div>
+          <div class="pat-otp-grid" id="otp-grid-firm" data-paste-support="true">
+            <input type="text" maxlength="1" class="pat-otp-cell firm" value="8" inputmode="numeric" pattern="[0-9]" data-idx="0" aria-label="Staff 2FA digit 1">
+            <input type="text" maxlength="1" class="pat-otp-cell firm" value="8" inputmode="numeric" pattern="[0-9]" data-idx="1" aria-label="Staff 2FA digit 2">
+            <input type="text" maxlength="1" class="pat-otp-cell firm" value="2" inputmode="numeric" pattern="[0-9]" data-idx="2" aria-label="Staff 2FA digit 3">
+            <input type="text" maxlength="1" class="pat-otp-cell firm" value="9" inputmode="numeric" pattern="[0-9]" data-idx="3" aria-label="Staff 2FA digit 4">
+            <input type="text" maxlength="1" class="pat-otp-cell firm" value="4" inputmode="numeric" pattern="[0-9]" data-idx="4" aria-label="Staff 2FA digit 5">
+            <input type="text" maxlength="1" class="pat-otp-cell firm" value="1" inputmode="numeric" pattern="[0-9]" data-idx="5" aria-label="Staff 2FA digit 6">
+          </div>
+          <p class="pat-challenge-hint">FIDO2 WebAuthn &middot; Time-based 30s rolling code &middot; Circular 230 audit log</p>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="pat-submit-btn firm-btn" id="btn-submit-firm-signin">
+          <span>Verify Credentials &amp; Enter Console</span>
+          <span class="pat-btn-arrow">&rarr;</span>
+        </button>
+
+        <!-- Quick Demo CPA Action -->
+        <div class="pat-demo-bar">
+          <button type="button" class="pat-demo-btn cyan-accent" id="btn-quick-cpa">
+            ⚡ Quick Demo CPA (Denise R. &middot; PTIN P01489240)
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- 4. FOOTER: STATUTORY COMPLIANCE CITATIONS -->
+    <footer class="pat-auth-footer">
+      <div class="pat-footer-badges">
+        <span class="pat-badge-item">Treas. Reg. &sect; 301.7701-15</span>
+        <span class="pat-badge-dot">&middot;</span>
+        <span class="pat-badge-item">IRS Pub 1345</span>
+        <span class="pat-badge-dot">&middot;</span>
+        <span class="pat-badge-item">Circular 230</span>
+      </div>
+      <p class="pat-copyright">Pivot Aide Tax &middot; Authorized IRS E-File Provider &middot; AES-256 Vault</p>
+    </footer>
+
+  </div>
+</div>
+
+<!-- ==========================================================================
+     SCOPED STYLESHEET: THE FILE ROOM AUTHENTICATION VIEWS
+     ========================================================================== -->
+<style id="pat-auth-component-styles">
+  /* Base Container & Centering */
+  .pat-auth-card-wrapper {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 16px;
+    box-sizing: border-box;
+    font-family: var(--f-body, 'Poppins', system-ui, -apple-system, sans-serif);
+    color: var(--night-ink, #DCEBF3);
+  }
+
+  /* Elevated Dark-Slate Glassmorphism Card */
+  .pat-auth-card {
+    position: relative;
+    background: linear-gradient(165deg, rgba(14, 44, 62, 0.90) 0%, rgba(7, 32, 46, 0.96) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-lg, 16px);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 
+      0 24px 64px -12px rgba(2, 14, 22, 0.75),
+      0 0 0 1px rgba(255, 255, 255, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14);
+    padding: 32px 28px 24px;
+    box-sizing: border-box;
+    overflow: hidden;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .pat-auth-card.mode-client {
+    border-color: rgba(234, 228, 47, 0.35);
+  }
+
+  .pat-auth-card.mode-firm {
+    border-color: rgba(1, 159, 255, 0.4);
+  }
+
+  /* Top Accent Bar */
+  .pat-card-accent-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #EAE42F 0%, #FFF885 50%, #B9B31C 100%);
+    transition: background 0.3s ease;
+  }
+
+  .pat-auth-card.mode-firm .pat-card-accent-bar {
+    background: linear-gradient(90deg, #019FFF 0%, #38BDF8 50%, #08557F 100%);
+  }
+
+  /* Brand Header */
+  .pat-auth-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 22px;
+  }
+
+  .pat-mascot-badge {
+    position: relative;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 40%, #0F3850 0%, #07202E 100%);
+    border: 2px solid rgba(234, 228, 47, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    box-shadow: 
+      0 8px 24px rgba(0, 0, 0, 0.45),
+      0 0 16px rgba(234, 228, 47, 0.15);
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+
+  .pat-auth-card.mode-firm .pat-mascot-badge {
+    border-color: rgba(1, 159, 255, 0.45);
+    box-shadow: 
+      0 8px 24px rgba(0, 0, 0, 0.45),
+      0 0 16px rgba(1, 159, 255, 0.2);
+  }
+
+  .pat-mascot-svg {
+    width: 66px;
+    height: 66px;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.4));
+  }
+
+  .pat-brand-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .pat-brand-title {
+    font-family: var(--f-display, 'Fraunces', serif);
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .gold-gradient-text {
+    color: var(--gold, #EAE42F);
+    background: linear-gradient(135deg, #FFF885 0%, #EAE42F 70%, #C7C000 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .pat-brand-subtitle {
+    font-size: 0.82rem;
+    color: var(--night-ink-2, #9FBECF);
+    margin: 0 0 6px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  .pat-statute-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--f-mono, 'JetBrains Mono', monospace);
+    font-size: 0.65rem;
+    color: #7CCBFF;
+    background: rgba(1, 159, 255, 0.1);
+    border: 1px solid rgba(1, 159, 255, 0.25);
+    padding: 3px 9px;
+    border-radius: 999px;
+    letter-spacing: 0.03em;
+  }
+
+  /* Portal Tabs (Client vs. Firm) */
+  .pat-portal-tabs {
+    display: flex;
+    background: rgba(6, 26, 38, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 4px;
+    margin-bottom: 14px;
+    gap: 4px;
+  }
+
+  .pat-portal-tab {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 12px;
+    background: transparent;
+    border: none;
+    border-radius: 9px;
+    color: var(--night-ink-2, #9FBECF);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pat-portal-tab:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .pat-portal-tab.active {
+    background: rgba(14, 44, 62, 0.95);
+    color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+  }
+
+  .pat-portal-tab.active[data-portal="client"] {
+    border-bottom: 2px solid var(--gold, #EAE42F);
+  }
+
+  .pat-portal-tab.active[data-portal="firm"] {
+    border-bottom: 2px solid #38BDF8;
+  }
+
+  /* Action Switcher (Sign In vs. Create Account) */
+  .pat-action-switcher {
+    display: flex;
+    background: rgba(4, 18, 26, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 3px;
+    margin-bottom: 20px;
+    gap: 3px;
+  }
+
+  .pat-action-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--night-ink-2, #9FBECF);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-align: center;
+  }
+
+  .pat-action-btn:hover {
+    color: #FFFFFF;
+  }
+
+  .pat-action-btn.active {
+    background: rgba(234, 228, 47, 0.16);
+    color: #FFF885;
+    border: 1px solid rgba(234, 228, 47, 0.4);
+    font-weight: 700;
+  }
+
+  /* ==========================================================================
+     GOOGLE OAUTH BUTTON & DIVIDER
+     ========================================================================== */
+  .pat-google-btn {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+    margin-bottom: 16px;
+  }
+
+  .pat-google-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.35);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  }
+
+  .pat-google-btn.firm-google {
+    border-color: rgba(1, 159, 255, 0.35);
+    background: rgba(1, 159, 255, 0.08);
+  }
+
+  .pat-google-btn.firm-google:hover {
+    border-color: rgba(1, 159, 255, 0.65);
+    background: rgba(1, 159, 255, 0.16);
+    box-shadow: 0 6px 18px rgba(1, 159, 255, 0.2);
+  }
+
+  .pat-google-icon {
+    flex-shrink: 0;
+  }
+
+  /* Divider */
+  .pat-auth-divider {
+    display: flex;
+    align-items: center;
+    margin: 14px 0 20px;
+    gap: 12px;
+  }
+
+  .pat-divider-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .pat-divider-text {
+    font-size: 0.70rem;
+    color: var(--night-ink-2, #9FBECF);
+    font-family: var(--f-mono, monospace);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  /* Domain Restriction Banner for Firm */
+  .pat-domain-banner {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: rgba(1, 159, 255, 0.08);
+    border: 1px solid rgba(1, 159, 255, 0.25);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    font-size: 0.72rem;
+  }
+
+  .pat-domain-badge {
+    font-weight: 700;
+    color: #38BDF8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 0.66rem;
+  }
+
+  .pat-domain-desc {
+    color: var(--night-ink-2, #9FBECF);
+  }
+
+  .pat-domain-desc b {
+    color: #FFFFFF;
+    font-family: var(--f-mono, monospace);
+  }
+
+  /* Floating Labels & Inputs */
+  .pat-float-group {
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .pat-float-input {
+    width: 100%;
+    height: 52px;
+    padding: 22px 14px 6px 14px;
+    background: rgba(5, 23, 34, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-size: 0.92rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pat-float-input.pat-mono {
+    font-family: var(--f-mono, 'JetBrains Mono', monospace);
+    letter-spacing: 0.05em;
+  }
+
+  .pat-float-input::placeholder {
+    color: transparent;
+  }
+
+  .pat-float-label {
+    position: absolute;
+    top: 16px;
+    left: 14px;
+    font-size: 0.85rem;
+    color: var(--night-ink-2, #9FBECF);
+    pointer-events: none;
+    transform-origin: left top;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pat-float-input:focus ~ .pat-float-label,
+  .pat-float-input:not(:placeholder-shown) ~ .pat-float-label {
+    transform: translateY(-9px) scale(0.74);
+    color: var(--gold, #EAE42F);
+    font-weight: 600;
+  }
+
+  .pat-auth-card.mode-firm .pat-float-input:focus ~ .pat-float-label,
+  .pat-auth-card.mode-firm .pat-float-input:not(:placeholder-shown) ~ .pat-float-label {
+    color: #38BDF8;
+  }
+
+  .pat-float-input:focus {
+    outline: none;
+    background: rgba(6, 28, 42, 0.92);
+    border-color: var(--gold, #EAE42F);
+    box-shadow: 0 0 0 3px rgba(234, 228, 47, 0.2);
+  }
+
+  .pat-auth-card.mode-firm .pat-float-input:focus {
+    border-color: #38BDF8;
+    box-shadow: 0 0 0 3px rgba(1, 159, 255, 0.22);
+  }
+
+  /* Password Toggle & Auxiliary Links */
+  .pat-has-password-toggle .pat-float-input {
+    padding-right: 48px;
+  }
+
+  .pat-pwd-toggle-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    padding: 6px;
+    color: var(--night-ink-2, #9FBECF);
+    cursor: pointer;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, background 0.15s;
+    z-index: 2;
+  }
+
+  .pat-pwd-toggle-btn:hover {
+    color: var(--gold, #EAE42F);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .pat-auth-card.mode-firm .pat-pwd-toggle-btn:hover {
+    color: #38BDF8;
+  }
+
+  .pat-field-aux {
+    display: flex;
+    justify-content: flex-end;
+    margin: -8px 0 16px;
+  }
+
+  .pat-forgot-link {
+    font-size: 0.74rem;
+    color: #FFF885;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s ease, text-decoration 0.15s;
+  }
+
+  .pat-forgot-link:hover {
+    text-decoration: underline;
+    color: var(--gold, #EAE42F);
+  }
+
+  .pat-auth-card.mode-firm .pat-forgot-link {
+    color: #38BDF8;
+  }
+
+  /* OTP / MFA Challenge Box */
+  .pat-challenge-box {
+    background: rgba(5, 21, 31, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+  }
+
+  .pat-challenge-box.firm {
+    border-color: rgba(1, 159, 255, 0.3);
+  }
+
+  .pat-challenge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .pat-challenge-title {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: #FFFFFF;
+  }
+
+  .pat-challenge-badge {
+    font-family: var(--f-mono, monospace);
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: rgba(234, 228, 47, 0.15);
+    color: var(--gold, #EAE42F);
+    border: 1px solid rgba(234, 228, 47, 0.3);
+  }
+
+  .pat-challenge-badge.firm {
+    background: rgba(1, 159, 255, 0.15);
+    color: #38BDF8;
+    border-color: rgba(1, 159, 255, 0.3);
+  }
+
+  .pat-otp-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .pat-otp-cell {
+    height: 46px;
+    background: rgba(9, 33, 49, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: #FFFFFF;
+    font-family: var(--f-mono, monospace);
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: center;
+    box-sizing: border-box;
+    transition: all 0.15s;
+  }
+
+  .pat-otp-cell:focus {
+    outline: none;
+    border-color: var(--gold, #EAE42F);
+    box-shadow: 0 0 0 2px rgba(234, 228, 47, 0.25);
+    background: rgba(14, 44, 62, 0.95);
+  }
+
+  .pat-otp-cell.firm:focus {
+    border-color: #38BDF8;
+    box-shadow: 0 0 0 2px rgba(1, 159, 255, 0.3);
+  }
+
+  .pat-challenge-hint {
+    font-size: 0.67rem;
+    color: var(--night-ink-2, #9FBECF);
+    margin: 0;
+    text-align: center;
+    font-family: var(--f-mono, monospace);
+  }
+
+  /* Consent Checkbox */
+  .pat-consent-wrap {
+    margin-bottom: 20px;
+    background: rgba(234, 228, 47, 0.05);
+    border: 1px solid rgba(234, 228, 47, 0.22);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+
+  .pat-consent-checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+  }
+
+  .pat-consent-checkbox-label input[type="checkbox"] {
+    margin-top: 2px;
+    width: 17px;
+    height: 17px;
+    accent-color: var(--gold, #EAE42F);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .pat-consent-text {
+    font-size: 0.72rem;
+    line-height: 1.45;
+    color: var(--night-ink, #DCEBF3);
+  }
+
+  .pat-consent-text b {
+    color: #FFFFFF;
+  }
+
+  /* Action Buttons */
+  .pat-submit-btn {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 10px;
+    font-size: 0.90rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  }
+
+  .pat-submit-btn.client-btn {
+    background: linear-gradient(135deg, #FFF885 0%, #EAE42F 50%, #C7C000 100%);
+    color: #06202D;
+  }
+
+  .pat-submit-btn.client-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(234, 228, 47, 0.3), 0 0 16px rgba(234, 228, 47, 0.2);
+  }
+
+  .pat-submit-btn.firm-btn {
+    background: linear-gradient(135deg, #38BDF8 0%, #019FFF 60%, #0A6BA8 100%);
+    color: #FFFFFF;
+  }
+
+  .pat-submit-btn.firm-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(1, 159, 255, 0.35), 0 0 16px rgba(1, 159, 255, 0.25);
+  }
+
+  .pat-btn-arrow {
+    font-size: 1.1rem;
+    transition: transform 0.15s ease;
+  }
+
+  .pat-submit-btn:hover .pat-btn-arrow {
+    transform: translateX(4px);
+  }
+
+  /* Quick Demo Helpers */
+  .pat-demo-bar {
+    margin-top: 14px;
+    text-align: center;
+  }
+
+  .pat-demo-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px dashed rgba(255, 255, 255, 0.18);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .pat-demo-btn.gold-accent {
+    color: #FFF885;
+    border-color: rgba(234, 228, 47, 0.35);
+  }
+
+  .pat-demo-btn.gold-accent:hover {
+    background: rgba(234, 228, 47, 0.1);
+    border-color: var(--gold, #EAE42F);
+  }
+
+  .pat-demo-btn.cyan-accent {
+    color: #38BDF8;
+    border-color: rgba(1, 159, 255, 0.35);
+  }
+
+  .pat-demo-btn.cyan-accent:hover {
+    background: rgba(1, 159, 255, 0.1);
+    border-color: #38BDF8;
+  }
+
+  /* Footer */
+  .pat-auth-footer {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    text-align: center;
+  }
+
+  .pat-footer-badges {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--f-mono, monospace);
+    font-size: 0.65rem;
+    color: var(--night-ink-2, #9FBECF);
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+
+  .pat-badge-dot { opacity: 0.5; }
+
+  .pat-copyright {
+    font-size: 0.65rem;
+    color: rgba(220, 235, 243, 0.45);
+    margin: 0;
+  }
+
+  /* Feedback Toast */
+  .pat-feedback-banner {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    margin-bottom: 16px;
+    background: rgba(1, 159, 255, 0.15);
+    color: #DCEBF3;
+    border: 1px solid rgba(1, 159, 255, 0.35);
+  }
+
+  .pat-feedback-banner.success {
+    background: rgba(31, 138, 84, 0.2);
+    border-color: rgba(31, 138, 84, 0.5);
+    color: #A3D8B9;
+  }
+
+  .pat-feedback-banner.error {
+    background: rgba(220, 38, 38, 0.2);
+    border-color: rgba(220, 38, 38, 0.5);
+    color: #FCA5A5;
+  }
+
+  /* Responsive Adjustments */
+  @media (max-width: 480px) {
+    .pat-auth-card {
+      padding: 24px 18px 20px;
+      border-radius: 14px;
+    }
+    .pat-brand-title { font-size: 1.35rem; }
+    .pat-mascot-badge { width: 66px; height: 66px; }
+    .pat-mascot-svg { width: 56px; height: 56px; }
+    .pat-otp-grid { gap: 5px; }
+    .pat-otp-cell { height: 42px; font-size: 1.05rem; }
+  }
+</style>
+
+<!-- ==========================================================================
+     VANILLA JS PROGRESSIVE ENHANCEMENT ENGINE
+     ========================================================================== -->
+<script>
+  (function () {
+    var card = document.getElementById('pat-auth-component');
+    if (!card) return;
+
+    var tabClient = document.getElementById('tab-portal-client');
+    var tabFirm = document.getElementById('tab-portal-firm');
+    var viewClient = document.getElementById('view-client-portal');
+    var viewFirm = document.getElementById('view-firm-portal');
+    var actionSwitcher = document.getElementById('pat-client-action-switcher');
+
+    var btnSignin = document.getElementById('btn-mode-signin');
+    var btnSignup = document.getElementById('btn-mode-signup');
+    var wrapClientSignin = document.getElementById('wrap-client-signin');
+    var wrapClientSignup = document.getElementById('wrap-client-signup');
+
+    var banner = document.getElementById('pat-auth-feedback');
+
+    var currentPortal = 'client';
+    var currentMode = 'signin';
+
+    function setView() {
+      // Toggle Portal Tab State
+      tabClient.classList.toggle('active', currentPortal === 'client');
+      tabClient.setAttribute('aria-selected', currentPortal === 'client');
+      tabFirm.classList.toggle('active', currentPortal === 'firm');
+      tabFirm.setAttribute('aria-selected', currentPortal === 'firm');
+
+      card.classList.toggle('mode-firm', currentPortal === 'firm');
+      card.classList.toggle('mode-client', currentPortal === 'client');
+
+      viewClient.style.display = (currentPortal === 'client') ? 'block' : 'none';
+      viewFirm.style.display = (currentPortal === 'firm') ? 'block' : 'none';
+      actionSwitcher.style.display = (currentPortal === 'client') ? 'flex' : 'none';
+
+      // Toggle Client Sign In vs Sign Up
+      btnSignin.classList.toggle('active', currentMode === 'signin');
+      btnSignup.classList.toggle('active', currentMode === 'signup');
+
+      wrapClientSignin.style.display = (currentMode === 'signin') ? 'block' : 'none';
+      wrapClientSignup.style.display = (currentMode === 'signup') ? 'block' : 'none';
+    }
+
+    if (tabClient) tabClient.addEventListener('click', function () { currentPortal = 'client'; setView(); });
+    if (tabFirm) tabFirm.addEventListener('click', function () { currentPortal = 'firm'; setView(); });
+    if (btnSignin) btnSignin.addEventListener('click', function () { currentMode = 'signin'; setView(); });
+    if (btnSignup) btnSignup.addEventListener('click', function () { currentMode = 'signup'; setView(); });
+
+    // Password Visibility Eye Toggle Handler
+    card.querySelectorAll('.pat-pwd-toggle-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var targetId = btn.getAttribute('data-target');
+        var input = document.getElementById(targetId);
+        if (!input) return;
+        var openSvg = btn.querySelector('.pat-eye-open');
+        var closedSvg = btn.querySelector('.pat-eye-closed');
+        if (input.type === 'password') {
+          input.type = 'text';
+          if (openSvg) openSvg.style.display = 'none';
+          if (closedSvg) closedSvg.style.display = 'block';
+          btn.setAttribute('aria-label', 'Hide password');
+        } else {
+          input.type = 'password';
+          if (openSvg) openSvg.style.display = 'block';
+          if (closedSvg) closedSvg.style.display = 'none';
+          btn.setAttribute('aria-label', 'Show password');
+        }
+      });
+    });
+
+    // 6-Digit OTP Auto-Advance & Clipboard Paste Handler
+    card.querySelectorAll('.pat-otp-grid').forEach(function (grid) {
+      var cells = grid.querySelectorAll('.pat-otp-cell');
+      cells.forEach(function (cell, idx) {
+        cell.addEventListener('input', function (e) {
+          var val = e.target.value.replace(/[^0-9a-zA-Z]/g, '');
+          e.target.value = val ? val.slice(-1) : '';
+          if (val && idx < cells.length - 1) {
+            cells[idx + 1].focus();
+          }
+        });
+
+        cell.addEventListener('keydown', function (e) {
+          if (e.key === 'Backspace' && !e.target.value && idx > 0) {
+            cells[idx - 1].focus();
+          }
+        });
+
+        cell.addEventListener('paste', function (e) {
+          var paste = (e.clipboardData || window.clipboardData).getData('text');
+          var chars = paste.replace(/[^0-9a-zA-Z]/g, '').slice(0, 6);
+          if (chars.length > 0) {
+            e.preventDefault();
+            chars.split('').forEach(function (ch, i) {
+              if (cells[i]) cells[i].value = ch;
+            });
+            var next = Math.min(chars.length, cells.length - 1);
+            cells[next].focus();
+          }
+        });
+      });
+    });
+
+    // Google Sign-In with Domain Check Enforcement for Firm
+    var btnGoogleFirm = document.getElementById('btn-google-firm-signin');
+    if (btnGoogleFirm) {
+      btnGoogleFirm.addEventListener('click', function () {
+        var emailInput = document.getElementById('firm-login-email');
+        var email = (emailInput ? emailInput.value.trim() : '');
+        if (email && !email.endsWith('@pivot-aide-tax.com') && !email.endsWith('@pivot-aide.tax')) {
+          banner.className = 'pat-feedback-banner error';
+          banner.style.display = 'block';
+          banner.textContent = 'Access Denied: Google Workspace login for Firm Operations requires an authorized @pivot-aide-tax.com staff domain account.';
+          return;
+        }
+        banner.className = 'pat-feedback-banner success';
+        banner.style.display = 'block';
+        banner.textContent = 'Google Workspace SSO verified (@pivot-aide-tax.com). Authorizing session...';
+        setTimeout(function () { window.location.href = 'firm/dashboard.html'; }, 700);
+      });
+    }
+
+    // Google Sign-In for Client
+    ['btn-google-client-signin', 'btn-google-client-signup'].forEach(function (id) {
+      var btn = document.getElementById(id);
+      if (btn) {
+        btn.addEventListener('click', function () {
+          banner.className = 'pat-feedback-banner success';
+          banner.style.display = 'block';
+          banner.textContent = 'Google OAuth Account Verified. Redirecting to Taxpayer Dashboard...';
+          setTimeout(function () { window.location.href = 'client/dashboard.html'; }, 700);
+        });
+      }
+    });
+
+    // Quick Demo Buttons
+    var qTaxpayer = document.getElementById('btn-quick-taxpayer');
+    if (qTaxpayer) {
+      qTaxpayer.addEventListener('click', function () {
+        document.getElementById('client-login-email').value = 'm.whitfield@example.com';
+        document.getElementById('client-login-pass').value = 'TaxpayerPass2025#';
+      });
+    }
+    var qCpa = document.getElementById('btn-quick-cpa');
+    if (qCpa) {
+      qCpa.addEventListener('click', function () {
+        document.getElementById('firm-login-email').value = 'denise@pivot-aide-tax.com';
+        document.getElementById('firm-login-ptin').value = 'P01489240';
+        document.getElementById('firm-login-pass').value = 'SupervisoryPass2025#';
+      });
+    }
+
+  })();
+</script>

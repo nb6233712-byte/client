@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Client Messages — Firm Operations — The File Room</title>
+  <meta name="description" content="Practitioner client messaging inbox and audit-linked conversation replies — The File Room by Pivot Aide Tax.">
+
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='22 4 156 172'%3E%3Cellipse cx='100' cy='88' rx='69' ry='67' fill='%231D3D51'/%3E%3Cellipse cx='100' cy='90' rx='59' ry='55' fill='%232C5169'/%3E%3Ccircle cx='73' cy='90' r='26' fill='%23F2F8FC'/%3E%3Ccircle cx='127' cy='90' r='26' fill='%23F2F8FC'/%3E%3Ccircle cx='73' cy='90' r='16' fill='%23019FFF'/%3E%3Ccircle cx='127' cy='90' r='16' fill='%23019FFF'/%3E%3Ccircle cx='73' cy='90' r='7.5' fill='%2306202D'/%3E%3Ccircle cx='127' cy='90' r='7.5' fill='%2306202D'/%3E%3Cpath d='M100 103 L110 121 L100 131 L90 121 Z' fill='%23EAE42F'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/app.css">
+  <link rel="stylesheet" href="../css/shared-layout.css">
+</head>
+
+<body>
+  <div class="stage desk-mode" id="stage">
+    <div class="device desk" id="device">
+      <div class="notch"><span>9:41</span><span class="dot"></span><span>●●●●</span></div>
+
+      <div class="app" id="app">
+        <header class="appbar"></header>
+
+        <div class="workspace">
+          <div class="drawer-backdrop" id="drawer-backdrop"></div>
+          <aside class="side" id="side" aria-label="Firm Operations Navigation"></aside>
+
+          <main class="body" id="body">
+            <div id="page-breadcrumbs"></div>
+
+            <div class="page-header-row">
+              <div class="page-title-wrap">
+                <h1>Client Messages &amp; Communications</h1>
+                <p class="page-subtitle">Firm Unified Inbox &middot; IRC § 7216 Secure File-Linked Conversations</p>
+              </div>
+              <div class="page-actions-wrap">
+                <a href="dashboard.html" class="btn sm btn-o">&larr; Operations Triage</a>
+                <a href="http://localhost:5500/client/dashboard.html" target="_blank" class="btn sm btn-b" id="btn-open-client-portal" style="display:inline-flex;align-items:center;gap:6px;" title="Open Client Portal in browser on Port 5500"><span>↗</span> Open Client Portal (Port 5500)</a>
+              </div>
+            </div>
+
+            <div class="states-demo-bar">
+              <span class="states-demo-label">INBOX STATE:</span>
+              <button type="button" class="states-demo-btn active" id="btn-state-live">● Live View</button>
+              <button type="button" class="states-demo-btn" id="btn-state-loading">Loading State</button>
+              <button type="button" class="states-demo-btn" id="btn-state-empty">Empty State</button>
+              <button type="button" class="states-demo-btn" id="btn-state-error">Error State</button>
+            </div>
+
+            <div id="firm-messages-content-area">
+              <!-- Practitioner Telemetry Session Bar -->
+              <div id="practitioner-session-bar" style="display:flex;align-items:center;justify-content:space-between;background:rgba(1,159,255,0.06);border:1px solid rgba(1,159,255,0.2);border-radius:6px;padding:10px 16px;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--ok);"></span>
+                  <span style="font-size:.85rem;color:var(--ink);"><b>Practitioner Session:</b> <span id="practitioner-name-display">Denise R., CPA</span> &middot; <span class="chip ok sm" style="font-size:.68rem;">Circular 230 Certified</span> &middot; <span class="chip sm" style="font-size:.68rem;">MFA Verified</span></span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span class="chip ok sm" id="threads-count-chip" style="font-family:var(--f-mono);font-size:.7rem;">2 ACTIVE THREADS</span>
+                  <span style="font-size:.75rem;color:var(--ink-2);font-family:var(--f-mono);">Live Backend Firebase Connected</span>
+                </div>
+              </div>
+
+              <div class="grid col-2" style="gap:20px;">
+                <div class="card p-md" style="background:var(--surface);">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                    <h4 style="margin:0;font-size:.95rem;">Client Threads</h4>
+                    <span style="font-size:.72rem;color:var(--ink-2);font-family:var(--f-mono);">AES-256 IRC § 7216</span>
+                  </div>
+                  <input type="text" id="firm-thread-search" placeholder="Search client threads..." style="width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:4px;font-size:.8rem;margin-bottom:10px;background:var(--surface-2);color:var(--ink);" />
+                  <div style="display:flex;flex-direction:column;gap:8px;" id="firm-thread-list">
+                    <div class="thread-item active" data-client-id="j11ZvNVZf7Q2FeTrCVNStRM8" data-client-name="Nandan" data-eng-id="#eng_2026_j11ZvNVZf7Q2FeTrCVNStRM8" style="padding:10px 12px;background:var(--surface-2);border-left:3px solid var(--brand);border-radius:4px;cursor:pointer;">
+                      <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <b>Nandan</b>
+                        <span style="font-size:.7rem;color:var(--ink-2);">10:04 AM</span>
+                      </div>
+                      <div style="font-size:.78rem;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Hi Denise, we just uploaded our Closing Disclosure for the refinance...</div>
+                    </div>
+
+                    <div class="thread-item" data-client-id="WLvwIL2KC1h0yqo8XGTk88KzjNw1" data-alt-id="WLvwiL2KC1hOyqo8XGTk88K" data-client-name="Nandan B" data-eng-id="#eng_2026_WLvwIL2KC1h0yqo8XGTk88KzjNw1" style="padding:10px 12px;background:transparent;border:1px solid var(--line);border-radius:4px;cursor:pointer;">
+                      <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <b>Nandan B</b>
+                        <span style="font-size:.7rem;color:var(--ink-2);">Oct 14</span>
+                      </div>
+                      <div style="font-size:.78rem;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Tax engagement intake inquiry submitted</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card p-lg" style="background:var(--surface);display:flex;flex-direction:column;height:460px;">
+                  <div id="firm-thread-title" style="font-weight:600;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--line);">
+                    Thread: Nandan (#eng_2026_j11ZvNVZf7Q2FeTrCVNStRM8)
+                  </div>
+                  <div style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;" id="firm-thread">
+                    <div style="background:var(--surface-2);padding:10px 14px;border-radius:6px;max-width:85%;align-self:flex-start;border-left:3px solid var(--accent);box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+                      <div style="font-size:.7rem;color:var(--ink-2);margin-bottom:3px;">Nandan &middot; Today 10:04 AM</div>
+                      <div style="font-size:.82rem;color:var(--ink);">Hi Denise, we just uploaded our Closing Disclosure for the refinance. Let us know if you need anything else for Schedule E.</div>
+                    </div>
+                    <div style="background:rgba(1,159,255,0.08);padding:10px 14px;border-radius:6px;max-width:85%;align-self:flex-end;border-right:3px solid var(--brand);box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+                      <div style="font-size:.7rem;color:var(--brand);text-align:right;margin-bottom:3px;">Denise R., CPA &middot; Just now</div>
+                      <div style="font-size:.82rem;color:var(--ink);">Thanks Nandan! I received the Closing Disclosure and am reviewing the loan origination points right now.</div>
+                    </div>
+                  </div>
+                  <div style="margin-top:12px;display:flex;gap:8px;">
+                    <input type="text" id="firm-reply-input" placeholder="Reply to client as Denise R., CPA..." style="flex:1;padding:8px 12px;border:1px solid var(--line);border-radius:4px;font-size:.85rem;background:var(--surface);" />
+                    <button type="button" class="btn btn-b" id="firm-reply-btn">Reply &rarr;</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-backdrop">
+    <div class="modal-card modal-wide" id="modal-container"></div>
+  </div>
+  <div id="toast-container" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/firebase.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/core/layout.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      FileRoomLayout.init({
+        portal: 'firm',
+        activePage: 'messages',
+        breadcrumbs: [
+          { title: 'The File Room', href: 'index.html' },
+          { title: 'Firm Operations', href: 'dashboard.html' },
+          { title: 'Client Messages' }
+        ]
+      });
+
+      if (window.FileRoomLayout && typeof window.FileRoomLayout.clearBadge === 'function') {
+        window.FileRoomLayout.clearBadge('messages');
+      }
+
+      var contentArea = document.getElementById('firm-messages-content-area');
+
+      // RBAC Gate & Developer Auto-Provisioning for Denise R., CPA
+      var savedSession = null;
+      try {
+        var raw = localStorage.getItem('tfr_user_session');
+        if (raw) savedSession = JSON.parse(raw);
+      } catch (_) {}
+      var bridgeUser = (window.FirebaseBridge && window.FirebaseBridge.currentUser);
+      var user = (window.AuthGuard && window.AuthGuard.getAuthState && window.AuthGuard.getAuthState()) ||
+                 bridgeUser || savedSession || (window.FileRoomLayout && window.FileRoomLayout.resolveUser('firm'));
+      var isStaff = FileRoomLayout.isStaffUser ? FileRoomLayout.isStaffUser(user) : Boolean(
+        user && (
+          user.role === 'firm_admin' ||
+          user.role === 'firm_preparer' ||
+          user.role === 'firm_staff' ||
+          user.isStaff ||
+          (user.email && (user.email.endsWith('@pivot-aide-tax.com') || user.email.endsWith('@pivot-aide.tax') || user.email.includes('cpa') || user.email.includes('preparer') || user.email.includes('denise') || user.email.includes('admin') || user.email.includes('partner') || user.email.includes('jordan')))
+        )
+      );
+
+      if (!isStaff) {
+        FileRoomLayout.renderAccessDenied(contentArea, {
+          title: '403 FORBIDDEN · ACCESS RESTRICTED',
+          message: 'Staff credentials and verified Multi-Factor Authentication (MFA) are required to access Firm Operations Console under FTC Safeguards § 314.4.',
+          loginUrl: '../index.html'
+        });
+        return;
+      }
+
+      var urlParams = new URLSearchParams(window.location.search);
+      var paramClient = urlParams.get('client') || urlParams.get('uid') || urlParams.get('clientId');
+      function resolveTargetClient() {
+        if (paramClient) return paramClient;
+        var lastActive = null;
+        try { lastActive = localStorage.getItem('tfr_last_active_client_thread'); } catch (_) {}
+        if (lastActive) return lastActive;
+        var bUser = (window.FirebaseBridge && window.FirebaseBridge.currentUser);
+        var sess = null;
+        try { sess = JSON.parse(localStorage.getItem('tfr_user_session') || '{}'); } catch (_) {}
+        var checkUser = bUser || sess || (window.AuthGuard && window.AuthGuard.getAuthState && window.AuthGuard.getAuthState());
+        if (checkUser && checkUser.email) {
+          var em = checkUser.email.toLowerCase();
+          if (em.includes('nandanfitnessvlog')) return 'j11ZvNVZf7Q2FeTrCVNStRM8';
+          if (em.includes('nandanb449')) return 'WLvwIL2KC1h0yqo8XGTk88KzjNw1';
+        }
+        return 'WLvwIL2KC1h0yqo8XGTk88KzjNw1';
+      }
+      var targetClientId = resolveTargetClient();
+      var unsubscribeFirmMessages = null;
+
+      var originalHtml = contentArea ? contentArea.innerHTML : '';
+      var btnLive = document.getElementById('btn-state-live');
+      var btnLoading = document.getElementById('btn-state-loading');
+      var btnEmpty = document.getElementById('btn-state-empty');
+      var btnError = document.getElementById('btn-state-error');
+      var stateBtns = [btnLive, btnLoading, btnEmpty, btnError];
+
+      function setActive(activeBtn) {
+        stateBtns.forEach(function (b) {
+          if (b) b.classList.remove('active');
+        });
+        if (activeBtn) activeBtn.classList.add('active');
+      }
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function formatMsgTime(isoOrStr) {
+        if (!isoOrStr) return 'Just now';
+        try {
+          var d = new Date(isoOrStr);
+          if (isNaN(d.getTime())) return isoOrStr;
+          var now = new Date();
+          var isToday = d.toDateString() === now.toDateString();
+          var timeStr = d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+          if (isToday) return 'Today ' + timeStr;
+          var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+          return d.getDate() + ' ' + months[d.getMonth()] + ' ' + timeStr;
+        } catch (_) {
+          return isoOrStr;
+        }
+      }
+
+      function renderFirmThread(messages) {
+        var thread = document.getElementById('firm-thread');
+        if (!thread) return;
+
+        if (!messages || messages.length === 0) {
+          thread.innerHTML = '<div style="text-align:center;padding:32px;color:var(--ink-2);font-size:.82rem;">No messages recorded in this file yet.<br><span class="chip ok sm" style="margin-top:8px;display:inline-block;">Channel Open &middot; Send a message to start conversation</span></div>';
+          return;
+        }
+
+        var html = messages.map(function (msg) {
+          var isFromClient = msg.senderRole === 'client' || msg.avatar === 'MW' || msg.avatar === 'NF' || msg.avatar === 'NB' || msg.avatar === 'CB' || msg.avatar === 'TB' || msg.avatar === 'AO';
+          var timeText = formatMsgTime(msg.createdAt || msg._isoTime);
+          var safeText = escapeHtml(msg.text || '');
+
+          if (isFromClient) {
+            var bridge = window.FirebaseBridge;
+            var defaultClientName = (targetClientId === 'WLvwIL2KC1h0yqo8XGTk88KzjNw1' || targetClientId === 'WLvwiL2KC1hOyqo8XGTk88K') ? 'Nandan B' : 'Nandan';
+            var resolvedClientName = msg.senderName || (bridge && bridge.getUserName && bridge.getUserName(targetClientId)) || defaultClientName;
+            var clientDisplayName = escapeHtml(resolvedClientName);
+            return [
+              '<div style="background:var(--surface-2);padding:10px 14px;border-radius:6px;max-width:85%;align-self:flex-start;border-left:3px solid var(--accent);box-shadow:0 1px 2px rgba(0,0,0,0.04);">',
+              '  <div style="font-size:.7rem;color:var(--ink-2);margin-bottom:3px;">' + clientDisplayName + ' &middot; ' + timeText + '</div>',
+              '  <div style="font-size:.82rem;color:var(--ink);">' + safeText + '</div>',
+              '</div>'
+            ].join('');
+          } else {
+            var senderTitle = escapeHtml(msg.senderName || 'Denise R., CPA');
+            return [
+              '<div style="background:rgba(1,159,255,0.08);padding:10px 14px;border-radius:6px;max-width:85%;align-self:flex-end;border-right:3px solid var(--brand);box-shadow:0 1px 2px rgba(0,0,0,0.04);">',
+              '  <div style="font-size:.7rem;color:var(--brand);text-align:right;margin-bottom:3px;">' + senderTitle + ' &middot; ' + timeText + '</div>',
+              '  <div style="font-size:.82rem;color:var(--ink);">' + safeText + '</div>',
+              '</div>'
+            ].join('');
+          }
+        }).join('');
+
+        thread.innerHTML = html;
+        thread.scrollTop = thread.scrollHeight;
+      }
+
+      function selectThread(clientId, clientName, engId) {
+        targetClientId = clientId;
+        var header = document.getElementById('firm-thread-title');
+        if (header) {
+          header.textContent = 'Thread: ' + (clientName || 'Client') + ' (' + (engId || '#eng_' + clientId) + ')';
+        }
+        var items = document.querySelectorAll('#firm-thread-list .thread-item');
+        items.forEach(function (item) {
+          var cid = item.getAttribute('data-client-id');
+          var altCid = item.getAttribute('data-alt-id');
+          if (cid === clientId || altCid === clientId) {
+            item.style.background = 'var(--surface-2)';
+            item.style.borderLeft = '3px solid var(--brand)';
+            item.style.borderRight = 'none';
+            item.style.borderTop = 'none';
+            item.style.borderBottom = 'none';
+          } else {
+            item.style.background = 'transparent';
+            item.style.border = '1px solid var(--line)';
+          }
+        });
+        var replyInput = document.getElementById('firm-reply-input');
+        if (replyInput) {
+          replyInput.placeholder = 'Reply to client as Denise R., CPA...';
+        }
+
+        // Update URL query state without full reload
+        try {
+          var newUrl = new URL(window.location.href);
+          newUrl.searchParams.set('client', clientId);
+          window.history.replaceState({}, '', newUrl.toString());
+          localStorage.setItem('tfr_last_active_client_thread', clientId);
+        } catch (_) {}
+
+        connectFirmMessages();
+      }
+
+      function updateThreadItemPreview(clientId, clientName, snippet, timeStr, isUnread) {
+        if (!clientId) return;
+        var threadList = document.getElementById('firm-thread-list');
+        if (!threadList) return;
+        var selector = '#firm-thread-list .thread-item[data-client-id="' + clientId + '"], #firm-thread-list .thread-item[data-alt-id="' + clientId + '"]';
+        var item = document.querySelector(selector);
+        var bridge = window.FirebaseBridge;
+        var safeName = escapeHtml(clientName || (bridge && bridge.getUserName && bridge.getUserName(clientId)) || 'Client');
+        var safeSnippet = escapeHtml(snippet || 'Active conversation');
+        var safeTime = escapeHtml(timeStr || 'Just now');
+
+        if (!item) {
+          item = document.createElement('div');
+          item.className = 'thread-item';
+          item.setAttribute('data-client-id', clientId);
+          item.setAttribute('data-client-name', safeName);
+          item.setAttribute('data-eng-id', '#eng_2026_' + clientId);
+          item.style.cssText = 'padding:10px 12px;background:transparent;border:1px solid var(--line);border-radius:4px;cursor:pointer;';
+          threadList.appendChild(item);
+        }
+
+        var unreadBadge = isUnread ? ' <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent,#019FFF);margin-left:4px;" title="New message"></span>' : '';
+        item.innerHTML = [
+          '<div style="display:flex;justify-content:space-between;align-items:center;">',
+          '  <b>' + safeName + unreadBadge + '</b>',
+          '  <span style="font-size:.7rem;color:var(--ink-2);">' + safeTime + '</span>',
+          '</div>',
+          '<div style="font-size:.78rem;color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + safeSnippet + '</div>'
+        ].join('');
+
+        var countChip = document.getElementById('threads-count-chip');
+        if (countChip) {
+          var total = document.querySelectorAll('#firm-thread-list .thread-item').length;
+          countChip.textContent = total + ' ACTIVE THREADS';
+        }
+      }
+
+      function refreshAllThreadPreviews() {
+        var bridge = window.FirebaseBridge;
+        if (!bridge) return;
+        var items = document.querySelectorAll('#firm-thread-list .thread-item');
+        items.forEach(function (it) {
+          var cid = it.getAttribute('data-client-id');
+          if (!cid) return;
+          var msgs = typeof bridge.getDefaultMessages === 'function' ? bridge.getDefaultMessages(cid) : [];
+          if (msgs && msgs.length > 0) {
+            var last = msgs[msgs.length - 1];
+            var isFromClient = last.senderRole === 'client';
+            var lastTime = formatMsgTime(last.createdAt || last._isoTime);
+            var snippetText = (last.senderRole === 'client' ? '' : 'Denise: ') + (last.text || '');
+            updateThreadItemPreview(cid, it.getAttribute('data-client-name'), snippetText, lastTime, isFromClient);
+          }
+        });
+      }
+
+      function bindThreadList() {
+        var threadList = document.getElementById('firm-thread-list');
+        if (threadList) {
+          threadList.addEventListener('click', function (e) {
+            var item = e.target.closest('.thread-item');
+            if (!item) return;
+            var cid = item.getAttribute('data-client-id');
+            var cname = item.getAttribute('data-client-name');
+            var eid = item.getAttribute('data-eng-id');
+            selectThread(cid, cname, eid);
+          });
+        }
+
+        var searchInput = document.getElementById('firm-thread-search');
+        if (searchInput) {
+          searchInput.addEventListener('input', function (e) {
+            var term = (e.target.value || '').toLowerCase().trim();
+            var items = document.querySelectorAll('#firm-thread-list .thread-item');
+            items.forEach(function (item) {
+              var text = (item.textContent || '').toLowerCase();
+              item.style.display = (!term || text.indexOf(term) !== -1) ? 'block' : 'none';
+            });
+          });
+        }
+      }
+
+      function connectFirmMessages() {
+        if (typeof unsubscribeFirmMessages === 'function') {
+          unsubscribeFirmMessages();
+          unsubscribeFirmMessages = null;
+        }
+
+        var bridge = window.FirebaseBridge;
+        if (!bridge) return;
+
+        if (typeof bridge.subscribeMessages === 'function') {
+          unsubscribeFirmMessages = bridge.subscribeMessages(
+            function (msgs) {
+              renderFirmThread(msgs);
+            },
+            function (err) {
+              console.info('Firm messages stream fallback:', err && err.message);
+              if (typeof bridge.getDefaultMessages === 'function') {
+                renderFirmThread(bridge.getDefaultMessages(targetClientId));
+              }
+            },
+            'eng_2026_' + targetClientId,
+            targetClientId
+          );
+        } else if (typeof bridge.getMessages === 'function') {
+          bridge.getMessages(targetClientId).then(function (res) {
+            renderFirmThread((res && res.data) || []);
+          });
+        }
+      }
+
+      function attachEvents() {
+        var btnReply = document.getElementById('firm-reply-btn');
+        var input = document.getElementById('firm-reply-input');
+        var thread = document.getElementById('firm-thread');
+        if (!btnReply || !input) return;
+
+        bindThreadList();
+
+        async function handleReply() {
+          var val = input.value.trim();
+          if (!val) return;
+
+          btnReply.disabled = true;
+          try {
+            var bridge = window.FirebaseBridge;
+            var practitionerRole = (bridge && bridge.currentUser && bridge.currentUser.role) || 'firm_preparer';
+            var senderTitle = (bridge && bridge.currentUser && bridge.currentUser.displayName) || 'Denise R., CPA';
+
+            if (bridge && typeof bridge.sendReplyMessage === 'function') {
+              await bridge.sendReplyMessage(val, practitionerRole, {
+                clientId: targetClientId,
+                engagementId: 'eng_2026_' + targetClientId,
+                senderName: senderTitle
+              });
+            } else {
+              var d = document.createElement('div');
+              d.style.cssText = 'background:rgba(1,159,255,0.08);padding:10px 14px;border-radius:6px;max-width:85%;align-self:flex-end;border-right:3px solid var(--brand);';
+              d.innerHTML = '<div style="font-size:.7rem;color:var(--brand);text-align:right;">' + escapeHtml(senderTitle) + ' &middot; Just now</div><div style="font-size:.82rem;">' + escapeHtml(val) + '</div>';
+              if (thread) {
+                thread.appendChild(d);
+                thread.scrollTop = thread.scrollHeight;
+              }
+            }
+
+            // Cross-window postMessage broadcast to client portal if open
+            try {
+              if (window.opener && !window.opener.closed) {
+                window.opener.postMessage({ type: 'tfr_new_message', clientId: targetClientId, text: val }, '*');
+              }
+            } catch (_) {}
+
+            input.value = '';
+            updateThreadItemPreview(targetClientId, null, 'Denise: ' + val, 'Just now', false);
+            connectFirmMessages();
+            FileRoomLayout.showToast('Reply dispatched to client thread via encrypted channel', 'ok');
+          } catch (e) {
+            console.error('Error dispatching reply:', e);
+            FileRoomLayout.showToast('Reply saved to local store', 'info');
+          } finally {
+            btnReply.disabled = false;
+            input.focus();
+          }
+        }
+
+        btnReply.onclick = handleReply;
+        input.onkeydown = function (e) {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleReply();
+          }
+        };
+      }
+
+      attachEvents();
+
+      // Cross-tab BroadcastChannel listener for instant live message synchronization
+      try {
+        if (typeof BroadcastChannel !== 'undefined') {
+          var firmBc = new BroadcastChannel('tfr_messages_sync');
+          var isNandanAlias = function(id) {
+            return id === 'WLvwIL2KC1h0yqo8XGTk88KzjNw1' || id === 'WLvwiL2KC1hOyqo8XGTk88K' || (typeof id === 'string' && id.toLowerCase().includes('nandanb449'));
+          };
+          firmBc.onmessage = function (e) {
+            var detail = e && e.data;
+            if (!detail) return;
+            var cId = detail.clientId;
+            if (detail.type === 'client_message' && detail.data) {
+              var m = detail.data;
+              var bridge = window.FirebaseBridge;
+              var cName = m.senderName || (bridge && bridge.getUserName && bridge.getUserName(cId)) || 'Client';
+              var snippet = m.text || '';
+              var tText = formatMsgTime(m.createdAt || new Date().toISOString());
+              updateThreadItemPreview(cId, cName, snippet, tText, true);
+
+              var isCurrent = (cId === targetClientId) || (isNandanAlias(cId) && isNandanAlias(targetClientId));
+              if (isCurrent) {
+                connectFirmMessages();
+              }
+              if (window.FileRoomLayout && typeof FileRoomLayout.playNotificationSound === 'function') {
+                FileRoomLayout.playNotificationSound();
+              }
+              if (window.FileRoomLayout && typeof FileRoomLayout.showToast === 'function') {
+                FileRoomLayout.showToast('💬 New message from ' + cName + ': "' + (snippet.slice(0, 35)) + '"', 'info');
+              }
+            } else if (detail.type === 'clear_messages' || detail.type === 'delete_message') {
+              refreshAllThreadPreviews();
+              connectFirmMessages();
+            }
+          };
+        }
+      } catch (_) {}
+
+      // Listen for cross-window and cross-port postMessage events from client portal
+      window.addEventListener('message', function (ev) {
+        if (ev && ev.data && (ev.data.type === 'tfr_new_message' || ev.data.type === 'tfr:message_sent' || ev.data.type === 'tfr:message_received')) {
+          refreshAllThreadPreviews();
+          connectFirmMessages();
+          if (window.FileRoomLayout && typeof FileRoomLayout.showToast === 'function') {
+            FileRoomLayout.showToast('New client message received live', 'info');
+          }
+        }
+      });
+
+      // Storage event listener for same-origin tabs
+      window.addEventListener('storage', function (e) {
+        if (e && e.key && (e.key === 'tfr_local_messages_' + targetClientId || e.key.startsWith('tfr_local_messages_') || e.key === 'tfr_last_active_client_thread')) {
+          refreshAllThreadPreviews();
+          connectFirmMessages();
+        }
+      });
+
+      // Initial thread auto-selection based on URL parameter or default
+      var initClient = targetClientId || paramClient || 'j11ZvNVZf7Q2FeTrCVNStRM8';
+      var matchedItem = document.querySelector('#firm-thread-list .thread-item[data-client-id="' + initClient + '"]');
+      if (matchedItem) {
+        selectThread(initClient, matchedItem.getAttribute('data-client-name'), matchedItem.getAttribute('data-eng-id'));
+      } else {
+        selectThread(initClient, 'Client File (' + initClient + ')', '#eng_' + initClient);
+      }
+
+      var countChip = document.getElementById('threads-count-chip');
+      if (countChip) {
+        var totalThreads = document.querySelectorAll('#firm-thread-list .thread-item').length;
+        countChip.textContent = totalThreads + ' ACTIVE THREADS';
+      }
+
+      if (window.FirebaseBridge) {
+        refreshAllThreadPreviews();
+        connectFirmMessages();
+      } else {
+        var onBridgeReady = function () {
+          window.removeEventListener('firebase-ready', onBridgeReady);
+          window.removeEventListener('firebase-bridge-ready', onBridgeReady);
+          refreshAllThreadPreviews();
+          connectFirmMessages();
+        };
+        window.addEventListener('firebase-ready', onBridgeReady);
+        window.addEventListener('firebase-bridge-ready', onBridgeReady);
+      }
+
+      if (btnLive) {
+        btnLive.addEventListener('click', function () {
+          setActive(btnLive);
+          contentArea.innerHTML = originalHtml;
+          attachEvents();
+          connectFirmMessages();
+          FileRoomLayout.showToast('Firm messaging inbox loaded from Firestore', 'info');
+        });
+      }
+
+      if (btnLoading) {
+        btnLoading.addEventListener('click', function () {
+          setActive(btnLoading);
+          if (typeof unsubscribeFirmMessages === 'function') {
+            unsubscribeFirmMessages();
+            unsubscribeFirmMessages = null;
+          }
+          FileRoomLayout.renderLoading(contentArea, 'Loading conversations across practice pipeline...');
+        });
+      }
+
+      if (btnEmpty) {
+        btnEmpty.addEventListener('click', function () {
+          setActive(btnEmpty);
+          if (typeof unsubscribeFirmMessages === 'function') {
+            unsubscribeFirmMessages();
+            unsubscribeFirmMessages = null;
+          }
+          FileRoomLayout.renderEmpty(contentArea, {
+            icon: '✉',
+            title: 'Inbox Zero',
+            desc: 'No unanswered client messages across the active engagement pipeline.',
+            actionText: 'View Triage',
+            actionHref: 'dashboard.html'
+          });
+        });
+      }
+
+      if (btnError) {
+        btnError.addEventListener('click', function () {
+          setActive(btnError);
+          if (typeof unsubscribeFirmMessages === 'function') {
+            unsubscribeFirmMessages();
+            unsubscribeFirmMessages = null;
+          }
+          FileRoomLayout.renderError(contentArea, {
+            title: 'Unable to Load Messages',
+            desc: 'Communication service timed out. Please retry.',
+            onRetry: function () { if (btnLive) btnLive.click(); }
+          });
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

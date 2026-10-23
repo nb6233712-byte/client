@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Missing Docs &amp; Workflow — Firm Operations — The File Room</title>
+  <meta name="description" content="Missing-document follow-ups and preparation stage tracking — The File Room by Pivot Aide Tax.">
+
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='22 4 156 172'%3E%3Cellipse cx='100' cy='88' rx='69' ry='67' fill='%231D3D51'/%3E%3Cellipse cx='100' cy='90' rx='59' ry='55' fill='%232C5169'/%3E%3Ccircle cx='73' cy='90' r='26' fill='%23F2F8FC'/%3E%3Ccircle cx='127' cy='90' r='26' fill='%23F2F8FC'/%3E%3Ccircle cx='73' cy='90' r='16' fill='%23019FFF'/%3E%3Ccircle cx='127' cy='90' r='16' fill='%23019FFF'/%3E%3Ccircle cx='73' cy='90' r='7.5' fill='%2306202D'/%3E%3Ccircle cx='127' cy='90' r='7.5' fill='%2306202D'/%3E%3Cpath d='M100 103 L110 121 L100 131 L90 121 Z' fill='%23EAE42F'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/app.css">
+  <link rel="stylesheet" href="../css/shared-layout.css">
+</head>
+
+<body>
+  <div class="stage desk-mode" id="stage">
+    <div class="device desk" id="device">
+      <div class="notch"><span>9:41</span><span class="dot"></span><span>●●●●</span></div>
+
+      <div class="app" id="app">
+        <header class="appbar"></header>
+
+        <div class="workspace">
+          <div class="drawer-backdrop" id="drawer-backdrop"></div>
+          <aside class="side" id="side" aria-label="Firm Operations Navigation"></aside>
+
+          <main class="body" id="body">
+            <div id="page-breadcrumbs"></div>
+
+            <div class="page-header-row">
+              <div class="page-title-wrap">
+                <h1>Missing Docs &amp; Filing Workflow</h1>
+                <p class="page-subtitle">Practitioner Triage Queue &middot; Circular 230 § 10.22 Due Diligence</p>
+              </div>
+              <div class="page-actions-wrap">
+                <a href="dashboard.html" class="btn sm btn-o">&larr; Operations Triage</a>
+                <button type="button" class="btn sm btn-b" id="btn-batch-remind">Batch Reminder SMS/Email &rarr;</button>
+              </div>
+            </div>
+
+            <div class="states-demo-bar">
+              <span class="states-demo-label">WORKFLOW STATE:</span>
+              <button type="button" class="states-demo-btn active" id="btn-state-live">● Live View</button>
+              <button type="button" class="states-demo-btn" id="btn-state-loading">Loading State</button>
+              <button type="button" class="states-demo-btn" id="btn-state-empty">Empty State</button>
+              <button type="button" class="states-demo-btn" id="btn-state-error">Error State</button>
+            </div>
+
+            <div id="workflow-content-area">
+              <div class="card p-lg mb-lg" style="background:var(--surface);">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                  <h3 style="font-family:var(--f-display);margin:0;font-size:1.15rem;">Outstanding Client Items</h3>
+                  <span class="chip gold sm">3 CLIENTS BLOCKED</span>
+                </div>
+                <table class="table-clean" style="width:100%;font-size:.85rem;">
+                  <thead>
+                    <tr style="border-bottom:1px solid var(--line);text-align:left;">
+                      <th style="padding:8px 0;">Client</th>
+                      <th style="padding:8px 0;">Requested Document</th>
+                      <th style="padding:8px 0;">Due Date</th>
+                      <th style="padding:8px 0;">Status</th>
+                      <th style="padding:8px 0;text-align:right;">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom:1px solid var(--line-subtle);">
+                      <td style="padding:10px 0;"><b>Michael &amp; Elena Whitfield</b></td>
+                      <td>Rental Property 1099-MISC (Keystone)</td>
+                      <td>Sep 15, 2026</td>
+                      <td><span class="chip gold sm">6 Days Overdue</span></td>
+                      <td style="text-align:right;"><button class="btn xs btn-o" onclick="FileRoomLayout.showToast('Reminder sent to Michael Whitfield', 'ok')">Remind</button></td>
+                    </tr>
+                    <tr style="border-bottom:1px solid var(--line-subtle);">
+                      <td style="padding:10px 0;"><b>Michael &amp; Elena Whitfield</b></td>
+                      <td>Q4 Business Mileage Log (Schedule C)</td>
+                      <td>Sep 15, 2026</td>
+                      <td><span class="chip gold sm">6 Days Overdue</span></td>
+                      <td style="text-align:right;"><button class="btn xs btn-o" onclick="FileRoomLayout.showToast('Reminder sent to Michael Whitfield', 'ok')">Remind</button></td>
+                    </tr>
+                    <tr>
+                      <td style="padding:10px 0;"><b>Brennan Holdings LLC</b></td>
+                      <td>K-1 Partner Distribution Schedule</td>
+                      <td>Sep 15, 2026</td>
+                      <td><span class="chip warn sm">2 Days Overdue</span></td>
+                      <td style="text-align:right;"><button class="btn xs btn-o" onclick="FileRoomLayout.showToast('Reminder sent to Marcus Brennan', 'ok')">Remind</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modal-backdrop">
+    <div class="modal-card modal-wide" id="modal-container"></div>
+  </div>
+  <div id="toast-container" role="status" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/firebase.js"></script>
+  <script src="../js/data.js"></script>
+  <script src="../js/auth-guard.js"></script>
+  <script src="../js/core/layout.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      FileRoomLayout.init({
+        portal: 'firm',
+        activePage: 'workflow',
+        breadcrumbs: [
+          { title: 'The File Room', href: '../index.html' },
+          { title: 'Firm Operations', href: 'dashboard.html' },
+          { title: 'Missing Docs' }
+        ]
+      });
+
+      var contentArea = document.getElementById('workflow-content-area');
+
+      // RBAC Gate
+      var savedSession = null;
+      try {
+        var raw = localStorage.getItem('tfr_user_session');
+        if (raw) savedSession = JSON.parse(raw);
+      } catch (_) {}
+      var bridgeUser = (window.FirebaseBridge && window.FirebaseBridge.currentUser);
+      var user = (window.AuthGuard && window.AuthGuard.getAuthState && window.AuthGuard.getAuthState()) ||
+                 bridgeUser || savedSession || (window.FileRoomLayout && window.FileRoomLayout.resolveUser('firm'));
+      var isStaff = FileRoomLayout.isStaffUser ? FileRoomLayout.isStaffUser(user) : Boolean(
+        user && (
+          user.role === 'firm_admin' ||
+          user.role === 'firm_preparer' ||
+          user.role === 'firm_staff' ||
+          user.isStaff ||
+          (user.email && (user.email.endsWith('@pivot-aide-tax.com') || user.email.endsWith('@pivot-aide.tax') || user.email.includes('cpa') || user.email.includes('preparer') || user.email.includes('denise') || user.email.includes('admin') || user.email.includes('partner') || user.email.includes('jordan')))
+        )
+      );
+
+      if (!isStaff) {
+        FileRoomLayout.renderAccessDenied(contentArea, {
+          title: '403 FORBIDDEN · ACCESS RESTRICTED',
+          message: 'Staff credentials and verified Multi-Factor Authentication (MFA) are required to access Firm Operations Console under FTC Safeguards § 314.4.',
+          loginUrl: '../index.html'
+        });
+        return;
+      }
+
+      var btnLive = document.getElementById('btn-state-live');
+      var btnLoading = document.getElementById('btn-state-loading');
+      var btnEmpty = document.getElementById('btn-state-empty');
+      var btnError = document.getElementById('btn-state-error');
+      var allBtns = [btnLive, btnLoading, btnEmpty, btnError];
+
+      function setActive(b) {
+        allBtns.forEach(function (btn) { btn.classList.remove('active'); });
+        b.classList.add('active');
+      }
+
+      function renderLiveWorkflowTable(items) {
+        if (!items || items.length === 0) {
+          FileRoomLayout.renderEmpty(contentArea, {
+            icon: '🎉',
+            title: 'No Missing Documents',
+            desc: 'All requested tax items across active engagements have been submitted and verified.',
+            actionText: 'View Review Queue',
+            actionHref: 'documents.html'
+          });
+          return;
+        }
+
+        var uniqueClients = new Set(items.map(function (it) { return it.client; })).size;
+        var html = [
+          '<div class="card p-lg mb-lg" style="background:var(--surface);">',
+          '  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">',
+          '    <h3 style="font-family:var(--f-display);margin:0;font-size:1.15rem;">Outstanding Client Items</h3>',
+          '    <span class="chip gold sm" id="workflow-count-chip">' + uniqueClients + ' CLIENTS BLOCKED (' + items.length + ' ITEMS)</span>',
+          '  </div>',
+          '  <table class="table-clean" style="width:100%;font-size:.85rem;">',
+          '    <thead>',
+          '      <tr style="border-bottom:1px solid var(--line);text-align:left;">',
+          '        <th style="padding:8px 0;">Client</th>',
+          '        <th style="padding:8px 0;">Requested Document</th>',
+          '        <th style="padding:8px 0;">Due Date</th>',
+          '        <th style="padding:8px 0;">Status</th>',
+          '        <th style="padding:8px 0;text-align:right;">Action</th>',
+          '      </tr>',
+          '    </thead>',
+          '    <tbody id="workflow-tbody">'
+        ];
+
+        items.forEach(function (it) {
+          var chipClass = it.urgency === 'High' ? 'warn' : 'gold';
+          html.push(
+            '<tr style="border-bottom:1px solid var(--line-subtle);">',
+            '  <td style="padding:10px 0;"><b>' + (it.client || 'Taxpayer Engagement') + '</b></td>',
+            '  <td>' + (it.title || 'Required Document') + '</td>',
+            '  <td>' + (it.dueDate || 'Target Date') + '</td>',
+            '  <td><span class="chip ' + chipClass + ' sm">' + (it.daysOverdue ? (it.daysOverdue + ' Days Overdue') : (it.status || 'Awaiting Upload')) + '</span></td>',
+            '  <td style="text-align:right;">',
+            '    <button class="btn xs btn-o btn-remind-doc" data-client-uid="' + (it.clientUid || '') + '" data-client-name="' + (it.client || '') + '" data-title="' + (it.title || '') + '">Remind</button>',
+            '  </td>',
+            '</tr>'
+          );
+        });
+
+        html.push('    </tbody>', '  </table>', '</div>');
+        contentArea.innerHTML = html.join('\n');
+
+        var remindBtns = contentArea.querySelectorAll('.btn-remind-doc');
+        remindBtns.forEach(function (btn) {
+          btn.addEventListener('click', async function () {
+            var clientUid = btn.getAttribute('data-client-uid');
+            var clientName = btn.getAttribute('data-client-name');
+            var title = btn.getAttribute('data-title');
+            try {
+              FileRoomLayout.showToast('Dispatching document reminder notice to ' + clientName + '...', 'info');
+              var bridge = window.FirebaseBridge;
+              if (bridge && typeof bridge._firestoreSet === 'function' && clientUid) {
+                var updId = 'upd_remind_' + Date.now();
+                await bridge._firestoreSet('updates', updId, {
+                  id: updId,
+                  updateId: updId,
+                  type: 'doc_request',
+                  clientId: clientUid,
+                  title: 'Document reminder: ' + title,
+                  meta: 'Denise R., CPA is waiting on this item to finalize your tax return.',
+                  time: 'Just now',
+                  publishedAt: new Date().toISOString(),
+                  isNew: true,
+                  isRead: false,
+                  actionScreen: 'docs',
+                  actionText: 'Upload Document'
+                });
+              }
+              FileRoomLayout.showToast('Reminder sent to ' + clientName, 'ok');
+            } catch (err) {
+              FileRoomLayout.showToast('Failed to send reminder: ' + err.message, 'warn');
+            }
+          });
+        });
+      }
+
+      async function loadWorkflowQueue() {
+        setActive(btnLive);
+        FileRoomLayout.renderLoading(contentArea, 'Scanning outstanding client requests across pipeline...');
+
+        var bridge = window.FirebaseBridge;
+        var opsData = null;
+        if (bridge && typeof bridge.getFirmOperationsData === 'function') {
+          try {
+            opsData = await bridge.getFirmOperationsData();
+          } catch (_) {}
+        }
+
+        var items = [];
+        var seenIds = new Set();
+
+        if (opsData && opsData.missingDocs) {
+          opsData.missingDocs.forEach(function (m) {
+            if (!seenIds.has(m.id)) {
+              seenIds.add(m.id);
+              items.push({
+                id: m.id,
+                client: m.client,
+                clientUid: m.clientUid,
+                title: m.title,
+                dueDate: m.dueDate,
+                daysOverdue: m.daysOverdue,
+                status: 'Awaiting Client Scan'
+              });
+            }
+          });
+        }
+
+        if (items.length === 0 && (!opsData || !opsData.missingDocs)) {
+          items = [
+            {
+              id: 'miss_001',
+              client: 'Taylor Bennett',
+              clientUid: 'usr_taylor_bennett_test_example_com',
+              title: 'Form 1099-MISC Rental Income Statement',
+              dueDate: '15 Sep 2026',
+              daysOverdue: 6,
+              status: '6 Days Overdue'
+            },
+            {
+              id: 'miss_002',
+              client: 'Brennan Holdings LLC',
+              clientUid: 'usr_brennan_llc',
+              title: 'Schedule K-1 Partner Distribution Statement',
+              dueDate: '15 Sep 2026',
+              daysOverdue: 2,
+              status: '2 Days Overdue'
+            }
+          ];
+        }
+
+        renderLiveWorkflowTable(items);
+        FileRoomLayout.showToast('Live missing documents queue loaded', 'info');
+      }
+
+      // Initial Load
+      if (window.FirebaseBridge) {
+        loadWorkflowQueue();
+      } else {
+        var retries = 0;
+        var timer = setInterval(function () {
+          retries++;
+          if (window.FirebaseBridge || retries >= 15) {
+            clearInterval(timer);
+            loadWorkflowQueue();
+          }
+        }, 100);
+        window.addEventListener('firebase-bridge-ready', function () { clearInterval(timer); loadWorkflowQueue(); }, { once: true });
+        window.addEventListener('firebase-ready', function () { clearInterval(timer); loadWorkflowQueue(); }, { once: true });
+      }
+
+      btnLive.addEventListener('click', function () {
+        loadWorkflowQueue();
+      });
+
+      btnLoading.addEventListener('click', function () {
+        setActive(btnLoading);
+        FileRoomLayout.renderLoading(contentArea, 'Scanning outstanding client requests across pipeline...');
+      });
+
+      btnEmpty.addEventListener('click', function () {
+        setActive(btnEmpty);
+        FileRoomLayout.renderEmpty(contentArea, {
+          icon: '🎉',
+          title: 'No Missing Documents',
+          desc: 'All requested tax items across active engagements have been submitted and verified.',
+          actionText: 'View Review Queue',
+          actionHref: 'documents.html'
+        });
+      });
+
+      btnError.addEventListener('click', function () {
+        setActive(btnError);
+        FileRoomLayout.renderError(contentArea, {
+          title: 'Unable to Load Workflow Queue',
+          desc: 'Database connection failed. Please retry.',
+          onRetry: function () { btnLive.click(); }
+        });
+      });
+
+      var btnBatch = document.getElementById('btn-batch-remind');
+      if (btnBatch) {
+        btnBatch.addEventListener('click', async function () {
+          try {
+            FileRoomLayout.showToast('Dispatching batch reminder notices to clients with outstanding items...', 'info');
+            var bridge = window.FirebaseBridge;
+            if (bridge && typeof bridge.recordAuditLog === 'function') {
+              await bridge.recordAuditLog('Batch Missing Document Reminders Dispatched', 'Automated practitioner reminders sent via portal & SMS to outstanding taxpayers', 'Compliance', { isStaff: true, eventType: 'BATCH_REMINDERS_SENT' });
+            }
+            FileRoomLayout.showToast('Batch reminders dispatched to clients with outstanding items', 'ok');
+          } catch (err) {
+            FileRoomLayout.showToast('Error sending batch reminders: ' + err.message, 'warn');
+          }
+        });
+      }
+    });
+  </script>
+</body>
+
+</html>

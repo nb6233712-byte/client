@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Authentication &middot; The File Room (Pivot Aide Tax)</title>
+  <meta name="description" content="Modular authentication views for Pivot Aide Tax: Google OAuth, Client Sign-In with Step 2 MFA, Sign-Up with IRC § 7216 Consent, and Firm Operations Console.">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='22 4 156 172'%3E%3Cellipse cx='100' cy='88' rx='69' ry='67' fill='%231D3D51'/%3E%3Cellipse cx='100' cy='90' rx='59' ry='55' fill='%232C5169'/%3E%3Ccircle cx='73' cy='90' r='26' fill='%23F2F8FC'/%3E%3Ccircle cx='127' cy='90' r='26' fill='%23F2F8FC'/%3E%3Ccircle cx='73' cy='90' r='16' fill='%23019FFF'/%3E%3Ccircle cx='127' cy='90' r='16' fill='%23019FFF'/%3E%3Ccircle cx='73' cy='90' r='7.5' fill='%2306202D'/%3E%3Ccircle cx='127' cy='90' r='7.5' fill='%2306202D'/%3E%3Cpath d='M100 103 L110 121 L100 131 L90 121 Z' fill='%23EAE42F'/%3E%3C/svg%3E">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700&family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/app.css">
+
+  <style>
+    body.pat-auth-page {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 15%, #0B2C3E 0%, #07202E 45%, #04141E 100%);
+      color: #DCEBF3;
+      font-family: var(--f-body, 'Poppins', sans-serif);
+      overflow-x: hidden;
+      overflow-y: auto;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    body.pat-auth-page::before {
+      content: '';
+      position: absolute;
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(1, 159, 255, 0.12) 0%, rgba(234, 228, 47, 0.08) 50%, transparent 70%);
+      filter: blur(60px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .pat-auth-page-topbar {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .pat-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--night-ink-2, #9FBECF);
+      font-size: 0.82rem;
+      font-weight: 500;
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.15s ease;
+    }
+
+    .pat-back-link:hover {
+      color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .pat-auth-page-main {
+      width: 100%;
+      position: relative;
+      z-index: 1;
+      padding: 60px 16px 40px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+
+<body class="pat-auth-page">
+  <header class="pat-auth-page-topbar">
+    <a href="index.html" class="pat-back-link">
+      <span>&larr;</span> Return to Gateway Switchboard
+    </a>
+    <span class="chip night sm" style="color:#38BDF8;border-color:rgba(1,159,255,0.3)">
+      v1.0 &middot; Authorized Access
+    </span>
+  </header>
+
+  <main class="pat-auth-page-main">
+    <div id="pat-component-container"></div>
+  </main>
+
+  <script>
+    // Asynchronously fetch and inject the modular component
+    fetch('components/auth-card.html')
+      .then(function(res) { return res.text(); })
+      .then(function(html) {
+        var container = document.getElementById('pat-component-container');
+        container.innerHTML = html;
+
+        // Execute the inline script from the component
+        var scripts = container.querySelectorAll('script');
+        scripts.forEach(function(s) {
+          var newScript = document.createElement('script');
+          newScript.textContent = s.textContent;
+          document.body.appendChild(newScript);
+        });
+      })
+      .catch(function(err) {
+        console.error('Failed to load auth component:', err);
+      });
+  </script>
+  <script type="module" src="js/auth.js"></script>
+</body>
+
+</html>
