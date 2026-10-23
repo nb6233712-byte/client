@@ -1,29 +1,8 @@
-# Dependencies
 node_modules/
-package-lock.json
-
-# Logs & Emulators
-.firebase/
-firebase-debug.log*
-firestore-debug.log*
-ui-debug.log*
-*.log
 playwright-report/
 test-results/
 .cache/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# Environment & Secrets
-.env
-.env.local
-.env.*.local
-*.pem
-*.key
-
-# IDE & OS
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
+.firebase/
